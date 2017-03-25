@@ -1,0 +1,42 @@
+{
+  "name": "lab404/laravel-auth-checker",
+  "description": "Laravel Auth Checker allows you to log users authentication, devices authenticated from and lock intrusions.",
+  "type": "library",
+  "keywords": [
+    "laravel",
+    "laravel-plugin",
+    "authentication",
+    "user",
+    "check",
+    "device",
+    "ip"
+  ],
+  "require": {
+    "laravel/framework": "5.4.*",
+    "jenssegers/agent": "2.5.*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "5.7.*",
+    "orchestra/testbench": "3.4.*",
+    "orchestra/database": "3.4.*"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "404lab",
+      "email": "web@404lab.fr"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Lab404\\AuthChecker\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Lab404\\Tests\\": "tests/"
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}

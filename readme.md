@@ -23,7 +23,7 @@
 
 - Require it with Composer:
 ```bash
-composer require lab404/laravel-auth-checker@dev
+composer require lab404/laravel-auth-checker
 ```
 
 - Add the service provider at the end of your `config/app.php`:

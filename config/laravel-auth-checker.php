@@ -2,6 +2,36 @@
 
 return [
 
+    /*
+    |--------------------------------------------------------------------------
+    | Throttling authentication logs
+    |--------------------------------------------------------------------------
+    |
+    | You can skip authentication logs for a device if the last authentication
+    | log creation is inferior to the throttle value. Set 0 to disable
+    | throttling, or set the time to throttle in minutes.
+    */
+    'throttle' => 0,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Device matching attributes
+    |--------------------------------------------------------------------------
+    |
+    | Declare fields that are used to define if a device is new or not for an
+    | user. For example, specifying 'platform', 'platform_version' and
+    | 'browser' will not create a new device if the user already has
+    | a device registered for these attributes.
+    */
+    'device_matching_attributes' => [
+        # Ex: OS X, Windows, ...
+        'platform',
+        # Ex: 10_12_2, 8, ...
+        'platform_version',
+        # Ex: Chrome, Firefox, ...
+        'browser',
+        # Ex: 42.0.2311.135, 37.0, ...
+        //'browser_version',
+    ]
 
 ];

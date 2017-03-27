@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Login extends Model
 {
+    /** @var string */
+    const TYPE_LOGIN = 'login';
+    const TYPE_ATTEMPT = 'attempt';
+    const TYPE_LOCKOUT = 'lockout';
+
     /** @var array */
     protected $with = ['device'];
 

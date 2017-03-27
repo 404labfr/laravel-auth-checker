@@ -27,15 +27,6 @@ class TestCase extends \Orchestra\Testbench\TestCase
             \DB::table('users')->insert([
                 ['name' => 'Admin', 'email' => 'admin@exemple.com', 'password' => bcrypt('password')]
             ]);
-
-            \DB::table('logins')->insert([
-                ['user_id' => 1, 'ip_address' => '1.2.3.4', 'device_id' => 1, 'created_at' => \Carbon\Carbon::now()->toDateTimeString()],
-                ['user_id' => 1, 'ip_address' => '5.6.7.8', 'device_id' => 1, 'created_at' => \Carbon\Carbon::now()->addDays(5)->toDateTimeString()]
-            ]);
-
-            \DB::table('devices')->insert([
-                ['user_id' => 1, 'platform' => 'OS X', 'platform_version' => '10_10', 'browser' => 'Chrome', 'browser_version' => 54, 'is_desktop' => 1, 'language' => 'fr_FR', 'created_at' => \Carbon\Carbon::now()->toDateTimeString()]
-            ]);
         });
     }
 

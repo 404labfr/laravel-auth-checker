@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/404labfr/laravel-auth-checker.svg?branch=master)](https://travis-ci.org/404labfr/laravel-auth-checker) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/404labfr/laravel-auth-checker/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/404labfr/laravel-auth-checker/?branch=master)
 
-**Laravel Auth Checker** is a plugin to **collect login info** and **devices** used when an **user authenticate**. It makes it easy to **catch user authentication** from **new IP address** or **new devices**.  
+**Laravel Auth Checker** is a plugin to **collect login info** and **devices** used when an **user authenticate**. It makes it easy to **catch user authentication, attempts and lockouts** from **new IP address** or **new devices**.  
  
 - [Requirements](#requirements)
 - [Installation](#installation)
@@ -61,12 +61,6 @@ $logins = $user->logins;
 ]
 ```
 
-Also, you can access to:
-- The last logged at date : `$user->last_logged_at`
-- The last login object : `$user->last_login`
-- The last login IP : `$user->last_ip_address`
-- All IP addresses : `$user->ip_addresses`
-
 ### Devices
 
 ```
@@ -101,8 +95,6 @@ $devices = $user->devices;
 There are two events available that can be used to add features to you app:
 - `LoginCreated` is fired when a user authenticate.
 - `DeviceCreated` is fired when a new device is created for an user.
-
-Each events returns two properties `$event->impersonator` and `$event->impersonated` containing User model isntance.
 
 ## Tests
 

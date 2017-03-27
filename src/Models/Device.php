@@ -5,6 +5,7 @@ namespace Lab404\AuthChecker\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Device extends Model
 {
@@ -23,8 +24,8 @@ class Device extends Model
         'browser_version',
         'is_desktop',
         'is_phone',
-        'language',
-        'is_locked',
+        'is_trusted',
+        'is_untrusted',
     ];
 
     /**
@@ -34,6 +35,15 @@ class Device extends Model
     public function logins()
     {
         return $this->hasMany(Login::class);
+    }
+
+    /**
+     * @param   void
+     * @return  HasOne
+     */
+    public function login()
+    {
+        return $this->hasOne(Login::class)->orderBy('created_at', 'desc');
     }
 
     /**

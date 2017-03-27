@@ -16,9 +16,13 @@ class CreateLoginsTable extends Migration
         Schema::create('logins', function (Blueprint $table) {
             $table->increments('id');
             $table->ipAddress('ip_address');
+            $table->string(10)->default('login')->index();
             $table->integer('user_id')->unsigned()->index();
             $table->integer('device_id')->unsigned()->index()->nullable();
             $table->timestamps();
+
+            $table->foreign('device_id')->references('id')->on('devices')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

@@ -12,7 +12,6 @@
     <testsuites>
         <testsuite name="Laravel Auth Checker Test Suite">
             <file>tests/AuthCheckerTest.php</file>
-            <file>tests/UserModelTest.php</file>
             <file>tests/EventsTest.php</file>
         </testsuite>
     </testsuites>

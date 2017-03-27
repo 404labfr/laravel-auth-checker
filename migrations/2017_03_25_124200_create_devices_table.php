@@ -23,8 +23,11 @@ class CreateDevicesTable extends Migration
             $table->boolean('is_desktop')->default(0);
             $table->boolean('is_mobile')->default(0);
             $table->string('language')->nullable();
-            $table->boolean('is_locked')->default(0);
+            $table->boolean('is_trusted')->default(0)->index();
+            $table->boolean('is_untrusted')->default(0)->index();
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

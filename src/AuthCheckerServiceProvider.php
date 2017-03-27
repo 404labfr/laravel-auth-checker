@@ -2,13 +2,10 @@
 
 namespace Lab404\AuthChecker;
 
-use Illuminate\Auth\Events\Login;
 use Illuminate\Events\Dispatcher;
 use Jenssegers\Agent\AgentServiceProvider;
-use Lab404\AuthChecker\Events\LoginCreated;
-use Lab404\AuthChecker\Listeners\SaveUserDevice;
-use Lab404\AuthChecker\Listeners\SaveUserLogin;
 use Lab404\AuthChecker\Services\AuthChecker;
+use Lab404\AuthChecker\Subscribers\AuthCheckerSubscriber;
 
 /**
  * Class ServiceProvider
@@ -37,7 +34,7 @@ class AuthCheckerServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->app->bind(AuthChecker::class, AuthChecker::class);
 
         $this->app->singleton(AuthChecker::class, function ($app) {
-            return new AuthChecker($app);
+            return new AuthChecker($app, $app['request']);
         });
 
         $this->app->alias(AuthChecker::class, 'authchecker');
@@ -107,9 +104,7 @@ class AuthCheckerServiceProvider extends \Illuminate\Support\ServiceProvider
     {
         /** @var Dispatcher $dispatcher */
         $dispatcher = $this->app['events'];
-
-        $dispatcher->listen(Login::class, SaveUserLogin::class);
-        $dispatcher->listen(LoginCreated::class, SaveUserDevice::class);
+        $dispatcher->subscribe(AuthCheckerSubscriber::class);
 
         return $this;
     }

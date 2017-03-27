@@ -65,7 +65,7 @@ class AuthChecker
         $device = $this->findUserDeviceByAgent($user, $agent);
 
         if (is_null($device)) {
-            $device = $this->createDeviceForUser($user);
+            $device = $this->createUserDeviceByAgent($user, $agent);
         }
 
         return $device;

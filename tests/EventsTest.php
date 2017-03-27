@@ -4,10 +4,8 @@ namespace Lab404\Tests;
 
 use Illuminate\Auth\Events\Login;
 use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Auth;
 use Jenssegers\Agent\Agent;
-use Lab404\AuthChecker\Events\DeviceCreated;
-use Lab404\AuthChecker\Events\LoginCreated;
 use Lab404\AuthChecker\Services\AuthChecker;
 use Lab404\Tests\Stubs\Models\User;
 
@@ -34,29 +32,23 @@ class EventsTest extends TestCase
     }
 
     /** @test */
-    public function it_registers_login_on_new_autentication()
+    public function it_registers_login_and_device_on_new_autentication()
     {
-        $user = User::first();
-        Event::fake();
+        /** @var Agent $agent */
+        $agent = $this->app->make('agent');
+        $agent->setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_0) AppleWebKit/537.00 (KHTML, like Gecko) Chrome/56.0.0000.00 Safari/537.00');
 
-        $this->assertEquals(2, $user->logins->count());
+        $user = Auth::loginUsingId(1);
 
-        Event::fire(new Login($user, false));
-        Event::hasDispatched(LoginCreated::class);
-    }
+        $this->assertTrue(Auth::check());
+        $this->assertInstanceOf(User::class, $user);
 
-    /** @test */
-    public function it_registers_device_on_new_login_creation()
-    {
-        $user = User::first();
-        $login = $user->logins->first();
+        $user->load('devices');
+        $this->assertEquals(1, $user->devices->count());
 
-        Event::fake();
-
-        $agent = new Agent();
-        $agent->setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/537.13+ (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2');
-        $this->dispatcher->dispatch(new LoginCreated($user, $login, $agent));
-
-        Event::hasDispatched(DeviceCreated::class);
+        $device = $user->devices->first();
+        $this->assertEquals('OS X', $device->platform);
+        $this->assertEquals('10_12_0', $device->platform_version);
+        $this->assertEquals('Chrome', $device->browser);
     }
 }

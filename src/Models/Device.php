@@ -7,6 +7,20 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
+/**
+ * Class Device
+ *
+ * @package Lab404\AuthChecker\Models
+ * @property int $id
+ * @property Login $login
+ * @property string|null $platform
+ * @property string|null $platform_version
+ * @property string|null $browser
+ * @property string|null $browser_version
+ * @property bool $is_desktop
+ * @property bool $is_mobile
+ * @property string|null $language
+ */
 class Device extends Model
 {
     /** @var array */

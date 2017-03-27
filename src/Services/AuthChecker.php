@@ -58,7 +58,7 @@ class AuthChecker
     /**
      * @param Authenticatable $user
      * @param Agent           $agent
-     * @return Device|null
+     * @return Device
      */
     public function findOrCreateUserDeviceByAgent(Authenticatable $user, Agent $agent)
     {

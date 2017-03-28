@@ -145,10 +145,10 @@ class AuthChecker
         $login_column = $this->getLoginColumnConfig();
 
         if ($payload->has($login_column)) {
-            $model = $this->config->get('auth.providers.users.model');
+            $model = (string)$this->config->get('auth.providers.users.model');
             $login_value = $payload->get($login_column);
 
-            $user = ($model)::where($login_column, '=', $login_value)->first();
+            $user = $model::where($login_column, '=', $login_value)->first();
             return $user;
         }
 

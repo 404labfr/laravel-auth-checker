@@ -23,6 +23,11 @@ class TestCase extends \Orchestra\Testbench\TestCase
             '--realpath' => realpath(__DIR__ . '/../migrations'),
         ]);
 
+        $this->loadMigrationsFrom([
+            '--database' => 'testbench',
+            '--realpath' => realpath(__DIR__ . '/Stubs/migrations'),
+        ]);
+
         $this->afterApplicationCreated(function () {
             \DB::table('users')->insert([
                 ['name' => 'Admin', 'email' => 'admin@exemple.com', 'password' => bcrypt('password')]

@@ -8,21 +8,17 @@ use Lab404\AuthChecker\Services\AuthChecker;
 use Lab404\AuthChecker\Subscribers\AuthCheckerSubscriber;
 
 /**
- * Class ServiceProvider
+ * Class AuthCheckerServiceProvider
  *
  * @package Lab404\AuthChecker
  */
 class AuthCheckerServiceProvider extends \Illuminate\Support\ServiceProvider
 {
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $defer = false;
 
-    /**
-     * @var string
-     */
-    protected $configName = 'laravel-auth-checker';
+    /** @var string */
+    protected $name = 'auth-checker';
 
     /**
      * Register the service provider.
@@ -38,7 +34,8 @@ class AuthCheckerServiceProvider extends \Illuminate\Support\ServiceProvider
         });
 
         $this->app->alias(AuthChecker::class, 'authchecker');
-        $this->app->register(AgentServiceProvider::class);
+
+        $this->registerDependencies();
     }
 
     /**
@@ -48,7 +45,21 @@ class AuthCheckerServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     public function boot()
     {
-        $this->publishConfig()->mergeConfig()->mergeMigrations()->registerEvents();
+        $this->mergeConfig()
+            ->mergeLang()
+            ->mergeMigrations()
+            ->registerEvents();
+    }
+
+    /**
+     * @param   void
+     * @return  self
+     */
+    protected function registerDependencies()
+    {
+        $this->app->register(AgentServiceProvider::class);
+
+        return $this;
     }
 
     /**
@@ -72,24 +83,26 @@ class AuthCheckerServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     protected function mergeConfig()
     {
-        $configPath = __DIR__ . '/../config/' . $this->configName . '.php';
+        $configPath = __DIR__ . '/../config/' . $this->name . '.php';
 
-        $this->mergeConfigFrom($configPath, $this->configName);
+        $this->mergeConfigFrom($configPath, $this->name);
+
+        $this->publishes([$configPath => config_path($this->name . '.php')], 'auth-checker');
 
         return $this;
     }
 
     /**
-     * Publish config file.
+     * Publish lang files.
      *
      * @param   void
      * @return  self
      */
-    protected function publishConfig()
+    protected function mergeLang()
     {
-        $configPath = __DIR__ . '/../config/' . $this->configName . '.php';
+        $langPath = __DIR__ . '/../lang/';
 
-        $this->publishes([$configPath => config_path($this->configName . '.php')], 'impersonate');
+        $this->loadTranslationsFrom($langPath, $this->name);
 
         return $this;
     }

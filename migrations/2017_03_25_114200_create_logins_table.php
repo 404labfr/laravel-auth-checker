@@ -16,7 +16,7 @@ class CreateLoginsTable extends Migration
         Schema::create('logins', function (Blueprint $table) {
             $table->increments('id');
             $table->ipAddress('ip_address');
-            $table->string(10)->default('login')->index();
+            $table->string('type')->default(\Lab404\AuthChecker\Models\Login::TYPE_LOGIN)->index();
             $table->integer('user_id')->unsigned()->index();
             $table->integer('device_id')->unsigned()->index()->nullable();
             $table->timestamps();

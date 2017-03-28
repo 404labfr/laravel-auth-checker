@@ -13,6 +13,7 @@
         <testsuite name="Laravel Auth Checker Test Suite">
             <file>tests/AuthCheckerTest.php</file>
             <file>tests/EventsTest.php</file>
+            <file>tests/HasLoginsAndDevicesTest.php</file>
         </testsuite>
     </testsuites>
     <filter>

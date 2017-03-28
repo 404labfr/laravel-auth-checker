@@ -2,7 +2,9 @@
 
 [![Build Status](https://travis-ci.org/404labfr/laravel-auth-checker.svg?branch=master)](https://travis-ci.org/404labfr/laravel-auth-checker) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/404labfr/laravel-auth-checker/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/404labfr/laravel-auth-checker/?branch=master)
 
-**Laravel Auth Checker** is a plugin to **collect login info** and **devices** used when an **user authenticate**. It makes it easy to **catch user authentication, attempts and lockouts** from **new IP address** or **new devices**.  
+**Laravel Auth Checker** is a plugin to **collect login info** and **devices** used when an **user authenticate**. It makes it easy to **catch user authentication, attempts and lockouts** from **new IP address** or **new devices**.
+  
+![Example logins table](screenshot.png?raw=true)
  
 - [Requirements](#requirements)
 - [Installation](#installation)
@@ -55,11 +57,20 @@ $logins = $user->logins;
     [
         'ip_address' => '1.2.3.4',
         'device_id' => 1, // ID of the used device
+        'type' => 'auth',
+        'device' => [
+            // See Devices
+        ],
         'created_at' => '2017-03-25 11:42:00',
     ],
     // ... and more
 ]
 ```
+
+Also, you can directly access logins by their type:
+- `$user->auths`, returns successful logins (via `Login::TYPE_LOGIN`)
+- `$user->fails`, returns failed logins (via `Login::TYPE_FAILED`)
+- `$user->lockouts`, returns locked out logins (via `Login::TYPE_LOCKOUT`)
 
 ### Devices
 
@@ -75,7 +86,10 @@ $devices = $user->devices;
         'browser_version' => '54',
         'is_desktop' => true,
         'is_mobile' => false,
-        'language' => 'fr-fr'
+        'language' => 'fr-fr',
+        'login' => [
+          // See logins
+        ],
     ],
     // ... and more
 ]
@@ -87,6 +101,9 @@ $devices = $user->devices;
 - [x] Collect IP addresses
 - [x] Collect devices
 - [x] Get user's login history
+- [x] Get devices history
+- [ ] Capture failed logins
+- [ ] Capture locked out logins
 - [ ] Trust / Untrust devices
 - [ ] Notify user when an unknow device log in
 

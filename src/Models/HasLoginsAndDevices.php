@@ -4,6 +4,16 @@ namespace Lab404\AuthChecker\Models;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * Class HasLoginsAndDevices
+ *
+ * @package Lab404\AuthChecker\Models
+ * @property \Illuminate\Support\Collection $logins
+ * @property \Illuminate\Support\Collection $auths
+ * @property \Illuminate\Support\Collection $fails
+ * @property \Illuminate\Support\Collection $lockouts
+ * @property \Illuminate\Support\Collection $devices
+ */
 trait HasLoginsAndDevices
 {
     /**
@@ -12,16 +22,31 @@ trait HasLoginsAndDevices
      */
     public function logins()
     {
-        return $this->hasMany(Login::class)->where('type', Login::TYPE_LOGIN);
+        return $this->hasMany(Login::class);
     }
 
     /**
      * @param   void
      * @return  HasMany
      */
-    public function attempts()
+    public function auths()
     {
-        return $this->hasMany(Login::class)->where('type', Login::TYPE_ATTEMPT);
+        $relation = $this->logins();
+        $relation->where('type', Login::TYPE_LOGIN);
+
+        return $relation;
+    }
+
+    /**
+     * @param   void
+     * @return  HasMany
+     */
+    public function fails()
+    {
+        $relation = $this->logins();
+        $relation->where('type', Login::TYPE_FAILED);
+
+        return $relation;
     }
 
     /**
@@ -30,7 +55,10 @@ trait HasLoginsAndDevices
      */
     public function lockouts()
     {
-        return $this->hasMany(Login::class)->where('type', Login::TYPE_LOCKOUT);
+        $relation = $this->logins();
+        $relation->where('type', Login::TYPE_LOCKOUT);
+
+        return $relation;
     }
 
     /**
@@ -48,6 +76,6 @@ trait HasLoginsAndDevices
      */
     public function hasDevices()
     {
-        return $this->devices && $this->devices->isNotEmpty();
+        return $this->devices()->get()->isNotEmpty();
     }
 }

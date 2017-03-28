@@ -5,7 +5,6 @@ namespace Lab404\AuthChecker\Services;
 use Carbon\Carbon;
 use Illuminate\Config\Repository as Config;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Jenssegers\Agent\Agent;
@@ -90,11 +89,11 @@ class AuthChecker
     }
 
     /**
-     * @param   Model $user
-     * @param   Agent $agent
+     * @param   Authenticatable $user
+     * @param   Agent           $agent
      * @return  Device
      */
-    public function createUserDeviceByAgent(Model $user, Agent $agent)
+    public function createUserDeviceByAgent(Authenticatable $user, Agent $agent)
     {
         $device = new Device();
 
@@ -113,26 +112,34 @@ class AuthChecker
     }
 
     /**
-     * @param   Model  $user
-     * @param   Device $device
+     * @param   Authenticatable $user
+     * @param   Device          $device
      * @return  Login
      */
-    public function createUserLoginForDevice(Model $user, Device $device)
+    public function createUserLoginForDevice(Authenticatable $user, Device $device)
     {
         $ip = $this->request->ip();
 
-        $login = new Login(['user_id' => $user->getKey(), 'ip_address' => $ip, 'device_id' => $device->id]);
+        $login = new Login([
+            'user_id' => $user->getKey(),
+            'ip_address' => $ip,
+            'device_id' => $device->id,
+            'type' => Login::TYPE_LOGIN,
+        ]);
+
+        $device->login()->save($login);
+
         event(new LoginCreated($login));
 
         return $login;
     }
 
     /**
-     * @param   Model $user
-     * @param   Agent $agent
+     * @param   Authenticatable $user
+     * @param   Agent           $agent
      * @return  false|Device
      */
-    public function findDeviceForUser(Model $user, Agent $agent)
+    public function findDeviceForUser(Authenticatable $user, Agent $agent)
     {
         if (!$user->hasDevices()) {
             return false;
@@ -152,10 +159,6 @@ class AuthChecker
     public function shouldLogDeviceLogin(Device $device)
     {
         $throttle = $this->getLoginThrottle();
-
-        if (!$device->relationLoaded('login')) {
-            $device->load('login');
-        }
 
         if ($throttle === 0 || is_null($device->login)) {
             return true;

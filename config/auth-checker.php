@@ -9,9 +9,10 @@ return [
     |
     | You can skip authentication logs for a device if the last authentication
     | log creation is inferior to the throttle value. Set 0 to disable
-    | throttling, or set the time to throttle in minutes.
+    | throttling, or set the throttling time in minutes.
+    |
     */
-    'throttle' => 0,
+    'throttle' => env('AUTH_CHECKER_THROTTLE', 5),
 
     /*
     |--------------------------------------------------------------------------
@@ -22,6 +23,7 @@ return [
     | user. For example, specifying 'platform', 'platform_version' and
     | 'browser' will not create a new device if the user already has
     | a device registered for these attributes.
+    |
     */
     'device_matching_attributes' => [
         # Ex: OS X, Windows, ...
@@ -32,6 +34,17 @@ return [
         'browser',
         # Ex: 42.0.2311.135, 37.0, ...
         //'browser_version',
-    ]
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | User login column
+    |--------------------------------------------------------------------------
+    |
+    | Declare the name of the column used to authenticate an user.
+    | By default, it's 'email' but you can change it to your needs.
+    |
+    */
+    'login_column' => 'email',
 
 ];

@@ -2,8 +2,11 @@
 
 namespace Lab404\Tests;
 
+use Illuminate\Auth\Events\Failed;
+use Illuminate\Auth\Events\Lockout;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Jenssegers\Agent\Agent;
 use Lab404\AuthChecker\Services\AuthChecker;
@@ -50,5 +53,29 @@ class EventsTest extends TestCase
         $this->assertEquals('OS X', $device->platform);
         $this->assertEquals('10_12_0', $device->platform_version);
         $this->assertEquals('Chrome', $device->browser);
+    }
+
+    /** @test */
+    public function it_creates_failed_login()
+    {
+        $user = User::first();
+        event(new Failed($user, []));
+
+        $this->assertEquals(0, $user->auths()->count());
+        $this->assertEquals(1, $user->fails()->count());
+        $this->assertEquals(1, $user->logins()->count());
+    }
+
+    /** @test */
+    public function it_creates_lockouts_login()
+    {
+        $user = User::first();
+
+        request()->merge(['email' => 'admin@exemple.com']);
+        event(new Lockout(request()));
+
+        $this->assertEquals(0, $user->auths()->count());
+        $this->assertEquals(1, $user->lockouts()->count());
+        $this->assertEquals(1, $user->logins()->count());
     }
 }

@@ -37,9 +37,9 @@ class AuthCheckerTest extends TestCase
         $this->assertInstanceOf(AuthChecker::class, app('authchecker'));
 
         $this->config->set('laravel-auth-checker.throttle', 5);
-        $this->assertEquals(5, $this->manager->getLoginThrottle());
+        $this->assertEquals(5, $this->manager->getLoginThrottleConfig());
         $this->config->set('laravel-auth-checker.throttle', 0);
-        $this->assertEquals(0, $this->manager->getLoginThrottle());
+        $this->assertEquals(0, $this->manager->getLoginThrottleConfig());
     }
 
     /** @test */

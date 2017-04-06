@@ -43,7 +43,7 @@ class AuthCheckerSubscriber
         if (!is_null($user)) {
             /** @var AuthChecker $manager */
             $manager = app('authchecker');
-            $manager->handleFailed($event->user);
+            $manager->handleFailed($user);
         }
     }
 

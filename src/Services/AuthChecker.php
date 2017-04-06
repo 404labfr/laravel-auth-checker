@@ -143,10 +143,10 @@ class AuthChecker
     }
 
     /**
-     * @param Collection|null $request
+     * @param Collection $payload
      * @return Authenticatable|null
      */
-    public function findUserFromPayload(Collection $payload = null)
+    public function findUserFromPayload(Collection $payload)
     {
         $login_column = $this->getLoginColumnConfig();
 

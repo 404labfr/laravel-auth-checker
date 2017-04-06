@@ -12,6 +12,7 @@
     - [Logins](#logins) 
     - [Devices](#devices) 
 - [Events](#events)
+- [Practical usage](#practical-usage)
 - [Tests](#tests)
 - [Contributors](#contributors)
 

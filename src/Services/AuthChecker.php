@@ -4,7 +4,7 @@ namespace Lab404\AuthChecker\Services;
 
 use Carbon\Carbon;
 use Illuminate\Config\Repository as Config;
-use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -13,6 +13,7 @@ use Lab404\AuthChecker\Events\DeviceCreated;
 use Lab404\AuthChecker\Events\FailedAuth;
 use Lab404\AuthChecker\Events\LockoutAuth;
 use Lab404\AuthChecker\Events\LoginCreated;
+use Lab404\AuthChecker\Interfaces\HasLoginsAndDevicesInterface;
 use Lab404\AuthChecker\Models\Device;
 use Lab404\AuthChecker\Models\Login;
 
@@ -31,6 +32,7 @@ class AuthChecker
      * AuthChecker
      *
      * @param Application $app
+     * @param Request     $request
      */
     public function __construct(Application $app, Request $request)
     {
@@ -40,10 +42,10 @@ class AuthChecker
     }
 
     /**
-     * @param   Authenticatable $user
+     * @param   HasLoginsAndDevicesInterface $user
      * @return  void
      */
-    public function handleLogin(Authenticatable $user)
+    public function handleLogin(HasLoginsAndDevicesInterface $user)
     {
         $device = $this->findOrCreateUserDeviceByAgent($user);
 
@@ -53,10 +55,10 @@ class AuthChecker
     }
 
     /**
-     * @param   Authenticatable $user
+     * @param   HasLoginsAndDevicesInterface $user
      * @return  void
      */
-    public function handleFailed(Authenticatable $user)
+    public function handleFailed(HasLoginsAndDevicesInterface $user)
     {
         $device = $this->findOrCreateUserDeviceByAgent($user);
         $this->createUserLoginForDevice($user, $device, Login::TYPE_FAILED);
@@ -83,11 +85,11 @@ class AuthChecker
     }
 
     /**
-     * @param Authenticatable $user
-     * @param Agent|null      $agent
+     * @param HasLoginsAndDevicesInterface $user
+     * @param Agent|null                   $agent
      * @return Device
      */
-    public function findOrCreateUserDeviceByAgent(Authenticatable $user, Agent $agent = null)
+    public function findOrCreateUserDeviceByAgent(HasLoginsAndDevicesInterface $user, Agent $agent = null)
     {
         $agent = is_null($agent) ? $this->app['agent'] : $agent;
         $device = $this->findUserDeviceByAgent($user, $agent);
@@ -100,11 +102,11 @@ class AuthChecker
     }
 
     /**
-     * @param   Authenticatable $user
-     * @param   Agent           $agent
+     * @param   HasLoginsAndDevicesInterface $user
+     * @param   Agent                        $agent
      * @return  Device|null
      */
-    public function findUserDeviceByAgent(Authenticatable $user, Agent $agent)
+    public function findUserDeviceByAgent(HasLoginsAndDevicesInterface $user, Agent $agent)
     {
         if (!$user->hasDevices()) {
             return null;
@@ -118,11 +120,11 @@ class AuthChecker
     }
 
     /**
-     * @param   Authenticatable $user
-     * @param   Agent           $agent
+     * @param   HasLoginsAndDevicesInterface $user
+     * @param   Agent                        $agent
      * @return  Device
      */
-    public function createUserDeviceByAgent(Authenticatable $user, Agent $agent)
+    public function createUserDeviceByAgent(HasLoginsAndDevicesInterface $user, Agent $agent)
     {
         $device = new Device();
 
@@ -144,7 +146,7 @@ class AuthChecker
 
     /**
      * @param Collection $payload
-     * @return Authenticatable|null
+     * @return HasLoginsAndDevicesInterface|null
      */
     public function findUserFromPayload(Collection $payload)
     {
@@ -154,6 +156,7 @@ class AuthChecker
             $model = (string)$this->config->get('auth.providers.users.model');
             $login_value = $payload->get($login_column);
 
+            /** @var Builder $model */
             $user = $model::where($login_column, '=', $login_value)->first();
             return $user;
         }
@@ -162,13 +165,16 @@ class AuthChecker
     }
 
     /**
-     * @param   Authenticatable $user
-     * @param   Device          $device
-     * @param   string          $type
+     * @param   HasLoginsAndDevicesInterface $user
+     * @param   Device                       $device
+     * @param   string                       $type
      * @return  Login
      */
-    public function createUserLoginForDevice(Authenticatable $user, Device $device, $type = Login::TYPE_LOGIN)
-    {
+    public function createUserLoginForDevice(
+        HasLoginsAndDevicesInterface $user,
+        Device $device,
+        $type = Login::TYPE_LOGIN
+    ) {
         $ip = $this->request->ip();
 
         $login = new Login([
@@ -186,11 +192,11 @@ class AuthChecker
     }
 
     /**
-     * @param   Authenticatable $user
-     * @param   Agent           $agent
+     * @param   HasLoginsAndDevicesInterface $user
+     * @param   Agent                        $agent
      * @return  false|Device
      */
-    public function findDeviceForUser(Authenticatable $user, Agent $agent)
+    public function findDeviceForUser(HasLoginsAndDevicesInterface $user, Agent $agent)
     {
         if (!$user->hasDevices()) {
             return false;
@@ -226,8 +232,9 @@ class AuthChecker
     }
 
     /**
-     * @param   Device $device
-     * @param   Agent  $agent
+     * @param   Device     $device
+     * @param   Agent      $agent
+     * @param   array|null $attributes
      * @return  bool
      */
     public function deviceMatch(Device $device, Agent $agent, array $attributes = null)

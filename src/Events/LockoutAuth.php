@@ -14,7 +14,7 @@ class LockoutAuth
     public $device;
 
     /**
-     * LockedOutAuth constructor.
+     * LockoutAuth constructor.
      *
      * @param   Login $login
      * @param   Device $device

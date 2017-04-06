@@ -10,7 +10,7 @@ class DeviceCreated
     public $device;
 
     /**
-     * LoginCreated constructor.
+     * DeviceCreated constructor.
      *
      * @param   Device $device
      */

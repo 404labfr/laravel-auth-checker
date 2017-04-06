@@ -8,11 +8,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * Class HasLoginsAndDevices
  *
  * @package Lab404\AuthChecker\Models
- * @property \Illuminate\Support\Collection $logins
- * @property \Illuminate\Support\Collection $auths
- * @property \Illuminate\Support\Collection $fails
- * @property \Illuminate\Support\Collection $lockouts
- * @property \Illuminate\Support\Collection $devices
  */
 trait HasLoginsAndDevices
 {

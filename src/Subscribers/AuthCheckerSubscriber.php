@@ -6,6 +6,7 @@ use Illuminate\Auth\Events\Failed;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Events\Dispatcher;
+use Lab404\AuthChecker\Interfaces\HasLoginsAndDevicesInterface;
 use Lab404\AuthChecker\Services\AuthChecker;
 
 class AuthCheckerSubscriber
@@ -27,9 +28,12 @@ class AuthCheckerSubscriber
      */
     public function onUserLogin(Login $event)
     {
+        /** @var HasLoginsAndDevicesInterface $user */
+        $user = $event->user;
+
         /** @var AuthChecker $manager */
         $manager = app('authchecker');
-        $manager->handleLogin($event->user);
+        $manager->handleLogin($user);
     }
 
     /**
@@ -38,6 +42,7 @@ class AuthCheckerSubscriber
      */
     public function onUserLoginFailed(Failed $event)
     {
+        /** @var HasLoginsAndDevicesInterface $user */
         $user = $event->user;
 
         if (!is_null($user)) {

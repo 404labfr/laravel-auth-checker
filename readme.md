@@ -37,7 +37,17 @@ composer require lab404/laravel-auth-checker
 ],
 ```
 
-- Add the trait `Lab404\AuthChecker\Models\HasLoginsAndDevices` to your **User** model.
+- Add to your **User** model the `Lab404\AuthChecker\Models\HasLoginsAndDevices` trait and the `Lab404\AuthChecker\Interfaces\HasLoginsAndDevicesInterface` interface.
+
+```php
+use Lab404\AuthChecker\Models\HasLoginsAndDevices;
+use Lab404\AuthChecker\Interfaces\HasLoginsAndDevicesInterface;
+
+class User extends Authenticatable implements HasLoginsAndDevicesInterface
+{
+    use Notifiable, HasLoginsAndDevices;  
+}
+```
 
 - Migrate your database:
 ```php

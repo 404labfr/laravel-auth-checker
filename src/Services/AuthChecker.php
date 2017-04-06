@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Jenssegers\Agent\Agent;
 use Lab404\AuthChecker\Events\DeviceCreated;
+use Lab404\AuthChecker\Events\FailedAuth;
+use Lab404\AuthChecker\Events\LockoutAuth;
 use Lab404\AuthChecker\Events\LoginCreated;
 use Lab404\AuthChecker\Models\Device;
 use Lab404\AuthChecker\Models\Login;
@@ -58,6 +60,8 @@ class AuthChecker
     {
         $device = $this->findOrCreateUserDeviceByAgent($user);
         $this->createUserLoginForDevice($user, $device, Login::TYPE_FAILED);
+
+        event(new FailedAuth($device->login, $device));
     }
 
     /**
@@ -73,6 +77,8 @@ class AuthChecker
         if ($user) {
             $device = $this->findOrCreateUserDeviceByAgent($user);
             $this->createUserLoginForDevice($user, $device, Login::TYPE_LOCKOUT);
+
+            event(new LockoutAuth($device->login, $device));
         }
     }
 

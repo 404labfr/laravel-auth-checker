@@ -102,16 +102,33 @@ $devices = $user->devices;
 - [x] Collect devices
 - [x] Get user's login history
 - [x] Get devices history
-- [ ] Capture failed logins
-- [ ] Capture locked out logins
+- [x] Capture failed logins
+- [x] Capture lockout logins
 - [ ] Trust / Untrust devices
 - [ ] Notify user when an unknow device log in
 
 ## Events
 
-There are two events available that can be used to add features to you app:
+There are many events available that can be used to add features to you app:
 - `LoginCreated` is fired when a user authenticate.
 - `DeviceCreated` is fired when a new device is created for an user.
+- `FailedAuth` is fired when an user fails to log in.
+- `LockoutAuth` is fired when authentication is locked for an user (too many attempts).
+
+Each events pass to your listeners a `Login` model and a `Device` model.
+ 
+## Practical usage
+
+Once the trait `HasLoginsAndDevices` is added to your `User` model, it is extended with these methods:
+
+- `logins()` returns all logins
+- `auths()` returns all successful login attemps
+- `fails()` returns all failed login attempts
+- `lockouts()` returns all lockouts login attempts
+
+Each login returned is associated with the `Device` model used.
+
+- `devices()` returns all devices used by the user to authenticate.
 
 ## Tests
 

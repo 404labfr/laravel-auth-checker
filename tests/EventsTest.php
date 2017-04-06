@@ -8,7 +8,10 @@ use Illuminate\Auth\Events\Login;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Event;
 use Jenssegers\Agent\Agent;
+use Lab404\AuthChecker\Events\FailedAuth;
+use Lab404\AuthChecker\Events\LockoutAuth;
 use Lab404\AuthChecker\Services\AuthChecker;
 use Lab404\Tests\Stubs\Models\User;
 
@@ -77,5 +80,33 @@ class EventsTest extends TestCase
         $this->assertEquals(0, $user->auths()->count());
         $this->assertEquals(1, $user->lockouts()->count());
         $this->assertEquals(1, $user->logins()->count());
+    }
+
+    /** @test */
+    public function it_fires_failed_auth_event()
+    {
+        Event::fake();
+
+        $user = User::first();
+
+        $this->manager->handleFailed($user);
+
+        Event::assertDispatched(FailedAuth::class, function ($e) use ($user) {
+            return $e->login->user_id == $user->id && $e->login->type == \Lab404\AuthChecker\Models\Login::TYPE_FAILED;
+        });
+    }
+
+    /** @test */
+    public function it_fires_lockout_auth_event()
+    {
+        Event::fake();
+
+        $user = User::first();
+
+        $this->manager->handleLockout(['email' => 'admin@exemple.com']);
+
+        Event::assertDispatched(LockoutAuth::class, function ($e) use ($user) {
+            return $e->login->user_id == $user->id && $e->login->type == \Lab404\AuthChecker\Models\Login::TYPE_LOCKOUT;
+        });
     }
 }

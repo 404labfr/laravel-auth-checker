@@ -50,7 +50,7 @@ class User extends Authenticatable implements HasLoginsAndDevicesInterface
 ```
 
 - Migrate your database:
-```php
+```bash
 php artisan db:migrate
 ```
 
@@ -60,7 +60,7 @@ This library brings to you logins data and devices data for your users.
 
 ### Logins
 
-```
+```php
 // Your user model:
 $logins = $user->logins;
 // Output: 
@@ -85,7 +85,7 @@ Also, you can directly access logins by their type:
 
 ### Devices
 
-```
+```php
 // Your user model:
 $devices = $user->devices;
 // Outputs:

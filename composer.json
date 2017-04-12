@@ -11,7 +11,7 @@
     "check",
     "device",
     "ip",
-    "laravel-package"
+    "laravel-package",
     "laravel-plugin"
   ],
   "require": {

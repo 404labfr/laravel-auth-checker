@@ -70,7 +70,11 @@ class AuthCheckerServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     protected function mergeMigrations()
     {
-        $this->loadMigrationsFrom(__DIR__ . '/../migrations');
+        $path = __DIR__ . '/../migrations';
+
+        $this->publishes([
+                $path => database_path('migrations'),
+        ], 'migrations');
 
         return $this;
     }

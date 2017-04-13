@@ -25,11 +25,13 @@
 ## Installation
 
 - Require it with Composer:
+
 ```bash
 composer require lab404/laravel-auth-checker
 ```
 
 - Add the service provider at the end of your `config/app.php`:
+
 ```php
 'providers' => [
     // ...
@@ -49,10 +51,14 @@ class User extends Authenticatable implements HasLoginsAndDevicesInterface
 }
 ```
 
-- Migrate your database:
+- Publish migrations and migrate your database:
+
 ```bash
+php artisan vendor:publish --tag=migrations
 php artisan db:migrate
 ```
+
+Note: Migrations are published in case you need to customize migrations timestamps to integrate your existing project.
 
 ## Access collected data
 

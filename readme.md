@@ -55,7 +55,7 @@ class User extends Authenticatable implements HasLoginsAndDevicesInterface
 
 ```bash
 php artisan vendor:publish --tag=migrations
-php artisan db:migrate
+php artisan migrate
 ```
 
 Note: Migrations are published in case you need to customize migrations timestamps to integrate your existing project.

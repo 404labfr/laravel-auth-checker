@@ -139,7 +139,7 @@ class AuthChecker
 
         $device->save();
 
-        event(DeviceCreated::class);
+        event(new DeviceCreated($device));
 
         return $device;
     }

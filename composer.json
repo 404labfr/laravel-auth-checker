@@ -15,7 +15,7 @@
     "laravel-plugin"
   ],
   "require": {
-    "laravel/framework": ">=5.4.*",
+    "laravel/framework": ">=5.4",
     "jenssegers/agent": "2.5.*"
   },
   "require-dev": {

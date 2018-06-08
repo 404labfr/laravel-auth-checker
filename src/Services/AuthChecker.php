@@ -240,29 +240,35 @@ class AuthChecker
     public function deviceMatch(Device $device, Agent $agent, array $attributes = null)
     {
         $attributes = is_null($attributes) ? $this->getDeviceMatchingAttributesConfig() : $attributes;
-        $matches = count($attributes) > 0 ? false : true;
+
+        $matches = 0;
 
         if (in_array('platform', $attributes)) {
-            $matches = $device->platform === $agent->platform();
+            $matches += $device->platform === $agent->platform();
         }
 
         if (in_array('platform_version', $attributes)) {
-            $matches = $device->platform_version === $agent->version($device->platform);
+
+            $agentPlatformVersion = $agent->version($device->platform);
+
+            $agentPlatformVersion = empty($agentPlatformVersion) ? '0' : $agentPlatformVersion;
+            
+            $matches += $device->platform_version === $agentPlatformVersion;
         }
 
         if (in_array('browser', $attributes)) {
-            $matches = $device->browser === $agent->browser();
+            $matches += $device->browser === $agent->browser();
         }
 
         if (in_array('browser_version', $attributes)) {
-            $matches = $device->browser_version === $agent->version($device->browser);
+            $matches += $device->browser_version === $agent->version($device->browser);
         }
 
         if (in_array('language', $attributes)) {
-            $matches = $device->language === $agent->version($device->language);
+            $matches += $device->language === $agent->version($device->language);
         }
 
-        return $matches;
+        return $matches == count($attributes);
     }
 
     /**
@@ -272,7 +278,6 @@ class AuthChecker
     public function getDeviceMatchingAttributesConfig()
     {
         return $this->config->get('laravel-auth-checker.device_matching_attributes', [
-            'ip',
             'platform',
             'platform_version',
             'browser',

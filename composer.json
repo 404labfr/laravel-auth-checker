@@ -15,14 +15,14 @@
     "laravel-plugin"
   ],
   "require": {
-    "laravel/framework": ">=5.4",
+    "php": "^7.1.3",
+    "laravel/framework": ">=5.8",
     "jenssegers/agent": "2.5.*"
   },
   "require-dev": {
-    "phpunit/phpunit": "5.7.*",
-    "orchestra/testbench": "3.4.*",
-    "orchestra/database": "3.4.*",
-    "mockery/mockery": "0.9.*"
+    "phpunit/phpunit": "^7.5 || ^8.0",
+    "orchestra/testbench": "~3.8.0",
+    "orchestra/database": "~3.8.0"
   },
   "license": "MIT",
   "authors": [

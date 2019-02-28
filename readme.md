@@ -19,8 +19,10 @@
 
 ## Requirements
 
-- Laravel >= 5.4
-- PHP >= 5.6
+- Laravel >= 5.8
+- PHP >= 7.1
+
+**See 1.1 branch for Laravel < 5.7**
 
 ## Installation
 

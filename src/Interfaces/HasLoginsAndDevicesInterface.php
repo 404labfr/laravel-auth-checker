@@ -5,8 +5,6 @@ namespace Lab404\AuthChecker\Interfaces;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * Interface HasLoginsAndDevices
- *
  * @package Lab404\AuthChecker\Interfaces
  * @property \Illuminate\Support\Collection $logins
  * @property \Illuminate\Support\Collection $auths
@@ -16,35 +14,17 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 interface HasLoginsAndDevicesInterface
 {
-    /**
-     * @return  HasMany
-     */
-    public function logins();
+    public function logins(): HasMany;
 
-    /**
-     * @return  HasMany
-     */
-    public function auths();
+    public function auths(): HasMany;
 
-    /**
-     * @return  HasMany
-     */
-    public function fails();
+    public function fails(): HasMany;
 
-    /**
-     * @return  HasMany
-     */
-    public function lockouts();
+    public function lockouts(): HasMany;
 
-    /**
-     * @return  HasMany
-     */
-    public function devices();
+    public function devices(): HasMany;
 
-    /**
-     * @return  bool
-     */
-    public function hasDevices();
+    public function hasDevices(): bool;
 
     /**
      * @return mixed

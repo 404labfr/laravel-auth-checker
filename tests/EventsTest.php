@@ -6,7 +6,6 @@ use Illuminate\Auth\Events\Failed;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Jenssegers\Agent\Agent;
@@ -17,13 +16,12 @@ use Lab404\Tests\Stubs\Models\User;
 
 class EventsTest extends TestCase
 {
-    /** @var  AuthChecker */
+    /** @var  AuthChecker $manager */
     protected $manager;
-
-    /** @var  Dispatcher */
+    /** @var  Dispatcher $dispatcher */
     protected $dispatcher;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -62,7 +60,7 @@ class EventsTest extends TestCase
     public function it_creates_failed_login()
     {
         $user = User::first();
-        event(new Failed($user, []));
+        event(new Failed('web', $user, []));
 
         $this->assertEquals(0, $user->auths()->count());
         $this->assertEquals(1, $user->fails()->count());

@@ -19,21 +19,13 @@ use Lab404\AuthChecker\Models\Login;
 
 class AuthChecker
 {
-    /** @var Application */
+    /** @var Application $app */
     private $app;
-
-    /** @var Request */
+    /** @var Request $request */
     private $request;
-
-    /** @var Config */
+    /** @var Config $config */
     private $config;
 
-    /**
-     * AuthChecker
-     *
-     * @param Application $app
-     * @param Request     $request
-     */
     public function __construct(Application $app, Request $request)
     {
         $this->app = $app;
@@ -41,11 +33,7 @@ class AuthChecker
         $this->config = $app['config'];
     }
 
-    /**
-     * @param   HasLoginsAndDevicesInterface $user
-     * @return  void
-     */
-    public function handleLogin(HasLoginsAndDevicesInterface $user)
+    public function handleLogin(HasLoginsAndDevicesInterface $user): void
     {
         $device = $this->findOrCreateUserDeviceByAgent($user);
 
@@ -54,11 +42,7 @@ class AuthChecker
         }
     }
 
-    /**
-     * @param   HasLoginsAndDevicesInterface $user
-     * @return  void
-     */
-    public function handleFailed(HasLoginsAndDevicesInterface $user)
+    public function handleFailed(HasLoginsAndDevicesInterface $user): void
     {
         $device = $this->findOrCreateUserDeviceByAgent($user);
         $this->createUserLoginForDevice($user, $device, Login::TYPE_FAILED);
@@ -66,11 +50,7 @@ class AuthChecker
         event(new FailedAuth($device->login, $device));
     }
 
-    /**
-     * @param   array $payload
-     * @return  void
-     */
-    public function handleLockout(array $payload = [])
+    public function handleLockout(array $payload = []): void
     {
         $payload = Collection::make($payload);
 
@@ -84,12 +64,7 @@ class AuthChecker
         }
     }
 
-    /**
-     * @param HasLoginsAndDevicesInterface $user
-     * @param Agent|null                   $agent
-     * @return Device
-     */
-    public function findOrCreateUserDeviceByAgent(HasLoginsAndDevicesInterface $user, Agent $agent = null)
+    public function findOrCreateUserDeviceByAgent(HasLoginsAndDevicesInterface $user, Agent $agent = null): Device
     {
         $agent = is_null($agent) ? $this->app['agent'] : $agent;
         $device = $this->findUserDeviceByAgent($user, $agent);
@@ -101,12 +76,7 @@ class AuthChecker
         return $device;
     }
 
-    /**
-     * @param   HasLoginsAndDevicesInterface $user
-     * @param   Agent                        $agent
-     * @return  Device|null
-     */
-    public function findUserDeviceByAgent(HasLoginsAndDevicesInterface $user, Agent $agent)
+    public function findUserDeviceByAgent(HasLoginsAndDevicesInterface $user, Agent $agent): ?Device
     {
         if (!$user->hasDevices()) {
             return null;
@@ -119,14 +89,10 @@ class AuthChecker
         return $matching ? $matching : null;
     }
 
-    /**
-     * @param   HasLoginsAndDevicesInterface $user
-     * @param   Agent                        $agent
-     * @return  Device
-     */
-    public function createUserDeviceByAgent(HasLoginsAndDevicesInterface $user, Agent $agent)
+    public function createUserDeviceByAgent(HasLoginsAndDevicesInterface $user, Agent $agent): Device
     {
-        $device = new Device();
+        $model = config('auth-checker.models.device') ?? Device::class;
+        $device = new $model;
 
         $device->platform = $agent->platform();
         $device->platform_version = $agent->version($device->platform);
@@ -144,11 +110,7 @@ class AuthChecker
         return $device;
     }
 
-    /**
-     * @param Collection $payload
-     * @return HasLoginsAndDevicesInterface|null
-     */
-    public function findUserFromPayload(Collection $payload)
+    public function findUserFromPayload(Collection $payload): ?HasLoginsAndDevicesInterface
     {
         $login_column = $this->getLoginColumnConfig();
 
@@ -164,20 +126,15 @@ class AuthChecker
         return null;
     }
 
-    /**
-     * @param   HasLoginsAndDevicesInterface $user
-     * @param   Device                       $device
-     * @param   string                       $type
-     * @return  Login
-     */
     public function createUserLoginForDevice(
         HasLoginsAndDevicesInterface $user,
         Device $device,
-        $type = Login::TYPE_LOGIN
-    ) {
+        string $type = Login::TYPE_LOGIN
+    ): Login {
+        $model = config('auth-checker.models.login') ?? Login::class;
         $ip = $this->request->ip();
 
-        $login = new Login([
+        $login = new $model([
             'user_id' => $user->getKey(),
             'ip_address' => $ip,
             'device_id' => $device->id,
@@ -191,12 +148,7 @@ class AuthChecker
         return $login;
     }
 
-    /**
-     * @param   HasLoginsAndDevicesInterface $user
-     * @param   Agent                        $agent
-     * @return  false|Device
-     */
-    public function findDeviceForUser(HasLoginsAndDevicesInterface $user, Agent $agent)
+    public function findDeviceForUser(HasLoginsAndDevicesInterface $user, Agent $agent): ?Device
     {
         if (!$user->hasDevices()) {
             return false;
@@ -209,11 +161,7 @@ class AuthChecker
         return is_null($device) ? false : $device;
     }
 
-    /**
-     * @param   Device $device
-     * @return  bool
-     */
-    public function shouldLogDeviceLogin(Device $device)
+    public function shouldLogDeviceLogin(Device $device): bool
     {
         $throttle = $this->getLoginThrottleConfig();
 
@@ -231,68 +179,52 @@ class AuthChecker
         return true;
     }
 
-    /**
-     * @param   Device     $device
-     * @param   Agent      $agent
-     * @param   array|null $attributes
-     * @return  bool
-     */
-    public function deviceMatch(Device $device, Agent $agent, array $attributes = null)
+    public function deviceMatch(Device $device, Agent $agent, array $attributes = null): bool
     {
         $attributes = is_null($attributes) ? $this->getDeviceMatchingAttributesConfig() : $attributes;
-        $matches = count($attributes) > 0 ? false : true;
+        $matches = 0;
 
         if (in_array('platform', $attributes)) {
-            $matches = $device->platform === $agent->platform();
+            $matches += $device->platform === $agent->platform();
         }
 
         if (in_array('platform_version', $attributes)) {
-            $matches = $device->platform_version === $agent->version($device->platform);
+            $agentPlatformVersion = $agent->version($device->platform);
+            $agentPlatformVersion = empty($agentPlatformVersion) ? '0' : $agentPlatformVersion;
+            $matches += $device->platform_version === $agentPlatformVersion;
         }
 
         if (in_array('browser', $attributes)) {
-            $matches = $device->browser === $agent->browser();
+            $matches += $device->browser === $agent->browser();
         }
 
         if (in_array('browser_version', $attributes)) {
-            $matches = $device->browser_version === $agent->version($device->browser);
+            $matches += $device->browser_version === $agent->version($device->browser);
         }
 
         if (in_array('language', $attributes)) {
-            $matches = $device->language === $agent->version($device->language);
+            $matches += $device->language === $agent->version($device->language);
         }
 
-        return $matches;
+        return $matches === count($attributes);
     }
 
-    /**
-     * @param   void
-     * @return  array
-     */
-    public function getDeviceMatchingAttributesConfig()
+    public function getDeviceMatchingAttributesConfig(): array
     {
-        return $this->config->get('laravel-auth-checker.device_matching_attributes', [
-            'ip',
+        return $this->config->get('auth-checker.device_matching_attributes', [
             'platform',
             'platform_version',
             'browser',
         ]);
     }
 
-    /**
-     * @param   void
-     * @return  int
-     */
-    public function getLoginThrottleConfig()
+    public function getLoginThrottleConfig(): int
     {
-        return (int)$this->config->get('laravel-auth-checker.throttle', 0);
+        return (int)$this->config->get('auth-checker.throttle', 0);
     }
 
-    /**
-     * @return  string
-     */
-    public function getLoginColumnConfig()
+    public function getLoginColumnConfig(): string
     {
-        return (string)$this->config->get('laravel-auth-checker.login_column', 'email');
+        return (string)$this->config->get('auth-checker.login_column', 'email');
     }
 }

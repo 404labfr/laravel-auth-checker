@@ -11,16 +11,14 @@ use Lab404\AuthChecker\Services\AuthChecker;
 
 class AuthCheckerTest extends TestCase
 {
-    /** @var AuthChecker */
+    /** @var AuthChecker $manager */
     protected $manager;
-
-    /** @var  Agent */
+    /** @var  Agent $agent */
     protected $agent;
-
-    /** @var  Repository */
+    /** @var  Repository $config */
     protected $config;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -36,9 +34,9 @@ class AuthCheckerTest extends TestCase
         $this->assertInstanceOf(AuthChecker::class, $this->app[AuthChecker::class]);
         $this->assertInstanceOf(AuthChecker::class, app('authchecker'));
 
-        $this->config->set('laravel-auth-checker.throttle', 5);
+        $this->config->set('auth-checker.throttle', 5);
         $this->assertEquals(5, $this->manager->getLoginThrottleConfig());
-        $this->config->set('laravel-auth-checker.throttle', 0);
+        $this->config->set('auth-checker.throttle', 0);
         $this->assertEquals(0, $this->manager->getLoginThrottleConfig());
     }
 
@@ -82,7 +80,7 @@ class AuthCheckerTest extends TestCase
         $device->user_id = 1;
         $device->save();
 
-        $this->config->set('laravel-auth-checker.throttle', 15);
+        $this->config->set('auth-checker.throttle', 15);
         $result = $this->manager->shouldLogDeviceLogin($device);
         $this->assertTrue($result);
 
@@ -90,12 +88,12 @@ class AuthCheckerTest extends TestCase
         $login->user_id = 1;
         $device->logins()->save($login);
 
-        $this->config->set('laravel-auth-checker.throttle', 0);
+        $this->config->set('auth-checker.throttle', 0);
         $result = $this->manager->shouldLogDeviceLogin($device);
         $this->assertTrue($result);
 
         $login->created_at = Carbon::now()->subMinutes(10);
-        $this->config->set('laravel-auth-checker.throttle', 5);
+        $this->config->set('auth-checker.throttle', 5);
         $result = $this->manager->shouldLogDeviceLogin($device);
         $this->assertTrue($result);
     }
@@ -111,7 +109,7 @@ class AuthCheckerTest extends TestCase
         $login->user_id = 1;
         $device->logins()->save($login);
 
-        $this->config->set('laravel-auth-checker.throttle', 5);
+        $this->config->set('auth-checker.throttle', 5);
         $result = $this->manager->shouldLogDeviceLogin($device);
         $this->assertFalse($result);
     }

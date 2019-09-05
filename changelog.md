@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.0
+
+- Laravel 6.0
+- Allow model customization
+- PHPDoc and typed return values
+
 ## 1.2.0
 
 - BC : Laravel 5.8 requirements

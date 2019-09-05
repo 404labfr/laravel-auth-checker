@@ -5,28 +5,19 @@ namespace Lab404\AuthChecker\Subscribers;
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Auth\Events\Login;
-use Illuminate\Events\Dispatcher;
 use Lab404\AuthChecker\Interfaces\HasLoginsAndDevicesInterface;
 use Lab404\AuthChecker\Services\AuthChecker;
 
 class AuthCheckerSubscriber
 {
-    /**
-     * @param   Dispatcher $events
-     * @return  void
-     */
-    public function subscribe($events)
+    public function subscribe($events): void
     {
         $events->listen(Login::class, [$this, 'onUserLogin']);
         $events->listen(Failed::class, [$this, 'onUserLoginFailed']);
         $events->listen(Lockout::class, [$this, 'onUserLoginLockout']);
     }
 
-    /**
-     * @param   Login $event
-     * @return  void
-     */
-    public function onUserLogin(Login $event)
+    public function onUserLogin(Login $event): void
     {
         /** @var HasLoginsAndDevicesInterface $user */
         $user = $event->user;
@@ -36,11 +27,7 @@ class AuthCheckerSubscriber
         $manager->handleLogin($user);
     }
 
-    /**
-     * @param   Failed $event
-     * @return  void
-     */
-    public function onUserLoginFailed(Failed $event)
+    public function onUserLoginFailed(Failed $event): void
     {
         /** @var HasLoginsAndDevicesInterface $user */
         $user = $event->user;
@@ -52,11 +39,7 @@ class AuthCheckerSubscriber
         }
     }
 
-    /**
-     * @param   Lockout $event
-     * @return  void
-     */
-    public function onUserLoginLockout(Lockout $event)
+    public function onUserLoginLockout(Lockout $event): void
     {
         $payload = $event->request->all();
 

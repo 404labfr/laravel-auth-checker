@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Class Login
- *
  * @package Lab404\AuthChecker\Models
  * @property int $id
  * @property \Lab404\AuthChecker\Models\Device $device
@@ -24,18 +22,15 @@ class Login extends Model
     const TYPE_LOGIN = 'auth';
     const TYPE_FAILED = 'failed';
     const TYPE_LOCKOUT = 'lockout';
-
-    /** @var array */
+    /** @var array $with */
     protected $with = ['device'];
-
-    /** @var array */
+    /** @var array $casts */
     protected $casts = [
         'user_id' => 'integer',
         'device_id' => 'integer',
         'ip_address' => 'string',
     ];
-
-    /** @var array */
+    /** @var array $fillable */
     protected $fillable = [
         'user_id',
         'ip_address',
@@ -43,23 +38,17 @@ class Login extends Model
         'type',
     ];
 
-    /**
-     * @param   void
-     * @return  BelongsTo
-     */
-    public function user()
+    public function user(): BelongsTo
     {
         $model = config('auth.providers.users.model');
 
         return $this->belongsTo($model);
     }
 
-    /**
-     * @param   void
-     * @return  BelongsTo
-     */
-    public function device()
+    public function device(): BelongsTo
     {
-        return $this->belongsTo(Device::class);
+        $model = config('auth-checker.models.device') ?? Device::class;
+
+        return $this->belongsTo($model);
     }
 }

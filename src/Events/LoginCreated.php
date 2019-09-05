@@ -6,14 +6,9 @@ use Lab404\AuthChecker\Models\Login;
 
 class LoginCreated
 {
-    /** @var Login */
+    /** @var Login $login */
     public $login;
 
-    /**
-     * LoginCreated constructor.
-     *
-     * @param   Login $login
-     */
     public function __construct(Login $login)
     {
         $this->login = $login;

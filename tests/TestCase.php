@@ -8,11 +8,7 @@ use Orchestra\Database\ConsoleServiceProvider;
 
 class TestCase extends \Orchestra\Testbench\TestCase
 {
-    /**
-     * @param   void
-     * @return  void
-     */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -20,12 +16,12 @@ class TestCase extends \Orchestra\Testbench\TestCase
 
         $this->loadMigrationsFrom([
             '--database' => 'testbench',
-            '--realpath' => realpath(__DIR__ . '/../migrations'),
+            '--path' => realpath(__DIR__ . '/../migrations'),
         ]);
 
         $this->loadMigrationsFrom([
             '--database' => 'testbench',
-            '--realpath' => realpath(__DIR__ . '/Stubs/migrations'),
+            '--path' => realpath(__DIR__ . '/Stubs/migrations'),
         ]);
 
         $this->afterApplicationCreated(function () {
@@ -35,10 +31,6 @@ class TestCase extends \Orchestra\Testbench\TestCase
         });
     }
 
-    /**
-     * @param  \Illuminate\Foundation\Application $app
-     * @return void
-     */
     protected function getEnvironmentSetUp($app)
     {
         // Setup default database to use sqlite :memory:
@@ -53,10 +45,6 @@ class TestCase extends \Orchestra\Testbench\TestCase
         $app['config']->set('auth.providers.users.model', User::class);
     }
 
-    /**
-     * @param \Illuminate\Foundation\Application $app
-     * @return array
-     */
     protected function getPackageProviders($app)
     {
         return [

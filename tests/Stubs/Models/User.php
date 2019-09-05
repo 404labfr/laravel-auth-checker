@@ -11,16 +11,9 @@ class User extends Authenticatable implements HasLoginsAndDevicesInterface
 {
     use Notifiable, HasLoginsAndDevices;
 
-    /**
-     * @var array
-     */
     protected $fillable = [
         'name', 'email', 'password',
     ];
-
-    /**
-     * @var array
-     */
     protected $hidden = [
         'password', 'remember_token',
     ];

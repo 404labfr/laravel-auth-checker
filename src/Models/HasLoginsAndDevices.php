@@ -11,20 +11,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 trait HasLoginsAndDevices
 {
-    /**
-     * @param   void
-     * @return  HasMany
-     */
-    public function logins()
+    public function logins(): HasMany
     {
-        return $this->hasMany(Login::class);
+        $model = config('auth-checker.models.login') ?? Login::class;
+
+        return $this->hasMany($model);
     }
 
-    /**
-     * @param   void
-     * @return  HasMany
-     */
-    public function auths()
+    public function auths(): HasMany
     {
         $relation = $this->logins();
         $relation->where('type', Login::TYPE_LOGIN);
@@ -32,11 +26,7 @@ trait HasLoginsAndDevices
         return $relation;
     }
 
-    /**
-     * @param   void
-     * @return  HasMany
-     */
-    public function fails()
+    public function fails(): HasMany
     {
         $relation = $this->logins();
         $relation->where('type', Login::TYPE_FAILED);
@@ -44,11 +34,7 @@ trait HasLoginsAndDevices
         return $relation;
     }
 
-    /**
-     * @param   void
-     * @return  HasMany
-     */
-    public function lockouts()
+    public function lockouts(): HasMany
     {
         $relation = $this->logins();
         $relation->where('type', Login::TYPE_LOCKOUT);
@@ -56,20 +42,14 @@ trait HasLoginsAndDevices
         return $relation;
     }
 
-    /**
-     * @param   void
-     * @return  HasMany
-     */
-    public function devices()
+    public function devices(): HasMany
     {
-        return $this->hasMany(Device::class);
+        $model = config('auth-checker.models.device') ?? Device::class;
+
+        return $this->hasMany($model);
     }
 
-    /**
-     * @param   void
-     * @return  bool
-     */
-    public function hasDevices()
+    public function hasDevices(): bool
     {
         return $this->devices()->get()->isNotEmpty();
     }

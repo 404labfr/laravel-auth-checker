@@ -7,18 +7,11 @@ use Lab404\AuthChecker\Models\Login;
 
 class LockoutAuth
 {
-    /** @var Login */
+    /** @var Login $login */
     public $login;
-
-    /** @var Device */
+    /** @var Device $device */
     public $device;
 
-    /**
-     * LockoutAuth constructor.
-     *
-     * @param   Login $login
-     * @param   Device $device
-     */
     public function __construct(Login $login, Device $device)
     {
         $this->login = $login;

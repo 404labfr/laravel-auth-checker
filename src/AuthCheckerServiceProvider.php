@@ -14,18 +14,10 @@ use Lab404\AuthChecker\Subscribers\AuthCheckerSubscriber;
  */
 class AuthCheckerServiceProvider extends \Illuminate\Support\ServiceProvider
 {
-    /** @var bool */
-    protected $defer = false;
-
-    /** @var string */
+    /** @var string $name */
     protected $name = 'auth-checker';
 
-    /**
-     * Register the service provider.
-     *
-     * @return void
-     */
-    public function register()
+    public function register(): void
     {
         $this->app->bind(AuthChecker::class, AuthChecker::class);
 
@@ -38,12 +30,7 @@ class AuthCheckerServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->registerDependencies();
     }
 
-    /**
-     * Bootstrap the application events.
-     *
-     * @return void
-     */
-    public function boot()
+    public function boot(): void
     {
         $this->mergeConfig()
             ->mergeLang()
@@ -51,24 +38,14 @@ class AuthCheckerServiceProvider extends \Illuminate\Support\ServiceProvider
             ->registerEvents();
     }
 
-    /**
-     * @param   void
-     * @return  self
-     */
-    protected function registerDependencies()
+    protected function registerDependencies(): self
     {
         $this->app->register(AgentServiceProvider::class);
 
         return $this;
     }
 
-    /**
-     * Merge migration files.
-     *
-     * @param   void
-     * @return  self
-     */
-    protected function mergeMigrations()
+    protected function mergeMigrations(): self
     {
         $path = __DIR__ . '/../migrations';
 
@@ -79,13 +56,7 @@ class AuthCheckerServiceProvider extends \Illuminate\Support\ServiceProvider
         return $this;
     }
 
-    /**
-     * Merge config file.
-     *
-     * @param   void
-     * @return  self
-     */
-    protected function mergeConfig()
+    protected function mergeConfig(): self
     {
         $configPath = __DIR__ . '/../config/' . $this->name . '.php';
 
@@ -96,13 +67,7 @@ class AuthCheckerServiceProvider extends \Illuminate\Support\ServiceProvider
         return $this;
     }
 
-    /**
-     * Publish lang files.
-     *
-     * @param   void
-     * @return  self
-     */
-    protected function mergeLang()
+    protected function mergeLang(): self
     {
         $langPath = __DIR__ . '/../lang/';
 
@@ -111,13 +76,7 @@ class AuthCheckerServiceProvider extends \Illuminate\Support\ServiceProvider
         return $this;
     }
 
-    /**
-     * Registers library events.
-     *
-     * @param   void
-     * @return  self
-     */
-    protected function registerEvents()
+    protected function registerEvents(): self
     {
         /** @var Dispatcher $dispatcher */
         $dispatcher = $this->app['events'];

@@ -47,4 +47,20 @@ return [
     */
     'login_column' => 'email',
 
+    /*
+    |--------------------------------------------------------------------------
+    | Models
+    |--------------------------------------------------------------------------
+    |
+    | Customize models used by the package.
+    | Custom models must extends defaults ones.
+    |
+    */
+    'models' => [
+        # Ex: App\Models\Device (default: Lab404\AuthChecker\Models\Device)
+        'device' => null,
+        # Ex: App\Models\Login (default: Lab404\AuthChecker\Models\Login)
+        'login' => null,
+    ]
+
 ];

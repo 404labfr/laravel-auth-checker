@@ -7,17 +7,11 @@ use Illuminate\Queue\SerializesModels;
 
 class DeviceCreated
 {
-
     use SerializesModels;
 
-    /** @var Device */
+    /** @var Device $device */
     public $device;
 
-    /**
-     * DeviceCreated constructor.
-     *
-     * @param   Device $device
-     */
     public function __construct(Device $device)
     {
         $this->device = $device;

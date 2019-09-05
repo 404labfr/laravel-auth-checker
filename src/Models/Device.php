@@ -5,36 +5,34 @@ namespace Lab404\AuthChecker\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * Class Device
- *
  * @package Lab404\AuthChecker\Models
- * @property int $id
- * @property \Lab404\AuthChecker\Models\Login $login
- * @property \Lab404\AuthChecker\Models\Login[] $logins
+ * @property int                                        $id
+ * @property \Lab404\AuthChecker\Models\Login           $login
+ * @property \Lab404\AuthChecker\Models\Login[]         $logins
  * @property \Illuminate\Contracts\Auth\Authenticatable $user
- * @property int $user_id
- * @property string $platform
- * @property string $platform_version
- * @property string $browser
- * @property string $browser_version
- * @property bool $is_desktop
- * @property bool $is_mobile
- * @property string $language
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
+ * @property int                                        $user_id
+ * @property string                                     $platform
+ * @property string                                     $platform_version
+ * @property string                                     $browser
+ * @property string                                     $browser_version
+ * @property bool                                       $is_desktop
+ * @property bool                                       $is_mobile
+ * @property string                                     $language
+ * @property \Carbon\Carbon                             $created_at
+ * @property \Carbon\Carbon                             $updated_at
  */
 class Device extends Model
 {
-    /** @var array */
+    /** @var array $casts */
     protected $casts = [
         'is_locked' => 'boolean',
         'is_desktop' => 'boolean',
         'is_phone' => 'boolean',
     ];
-
-    /** @var array */
+    /** @var array $fillable */
     protected $fillable = [
         'platform',
         'platform_version',
@@ -46,31 +44,23 @@ class Device extends Model
         'is_untrusted',
     ];
 
-    /**
-     * @param   void
-     * @return  HasMany
-     */
-    public function logins()
+    public function logins(): HasMany
     {
-        return $this->hasMany(Login::class);
+        $model = config('auth-checker.models.login') ?? Login::class;
+
+        return $this->hasMany($model);
     }
 
-    /**
-     * @param   void
-     * @return  Login
-     */
-    public function login()
+    public function login(): HasOne
     {
-        $relation = $this->hasOne(Login::class);
+        $model = config('auth-checker.models.login') ?? Login::class;
+
+        $relation = $this->hasOne($model);
         $relation->orderBy('created_at', 'desc');
         return $relation;
     }
 
-    /**
-     * @param   void
-     * @return  BelongsTo
-     */
-    public function user()
+    public function user(): BelongsTo
     {
         $model = config('auth.providers.users.model');
 

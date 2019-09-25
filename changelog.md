@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.0
+
+- Changed how the application boot
+
 ## 1.3.0
 
 - Laravel 6.0

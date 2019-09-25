@@ -33,15 +33,6 @@
 composer require lab404/laravel-auth-checker
 ```
 
-- Add the service provider at the end of your `config/app.php`:
-
-```php
-'providers' => [
-    // ...
-    Lab404\AuthChecker\AuthCheckerServiceProvider::class,
-],
-```
-
 - Add to your **User** model the `Lab404\AuthChecker\Models\HasLoginsAndDevices` trait and the `Lab404\AuthChecker\Interfaces\HasLoginsAndDevicesInterface` interface.
 
 ```php
@@ -57,11 +48,11 @@ class User extends Authenticatable implements HasLoginsAndDevicesInterface
 - Publish migrations and migrate your database:
 
 ```bash
-php artisan vendor:publish --tag=migrations
+php artisan vendor:publish --tag=auth-checker
 php artisan migrate
 ```
 
-Note: Migrations are published in case you need to customize migrations timestamps to integrate your existing project.
+Note: Migrations are published in case you need to customize migrations timestamps to integrate to your existing project.
 
 ## Access collected data
 

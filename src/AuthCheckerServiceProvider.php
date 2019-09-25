@@ -14,74 +14,36 @@ use Lab404\AuthChecker\Subscribers\AuthCheckerSubscriber;
  */
 class AuthCheckerServiceProvider extends \Illuminate\Support\ServiceProvider
 {
-    /** @var string $name */
-    protected $name = 'auth-checker';
+    public function boot(): void
+    {
+        $this->publishes([
+            __DIR__.'../config/auth-checker.php' => config_path('auth-checker.php')
+        ], 'auth-checker');
+
+        if (false === class_exists('CreateLoginsTable') && false === class_exists('CreateDevicesTable')) {
+            $this->publishes([
+                __DIR__.'/../migrations/create_devices_table.php.stub' => database_path('migrations/'.date('Y_m_d_His', time()).'_create_devices_table.php'),
+                __DIR__.'/../migrations/create_logins_table.php.stub' => database_path('migrations/'.date('Y_m_d_His', time()).'_create_logins_table.php')
+            ], 'auth-checker');
+        }
+    }
 
     public function register(): void
     {
-        $this->app->bind(AuthChecker::class, AuthChecker::class);
+        $this->mergeConfigFrom(__DIR__.'/../config/auth-checker.php', 'auth-checker');
 
+        $this->loadTranslationsFrom(__DIR__.'/../lang/', 'auth-checker');
+        
         $this->app->singleton(AuthChecker::class, function ($app) {
             return new AuthChecker($app, $app['request']);
         });
 
         $this->app->alias(AuthChecker::class, 'authchecker');
 
-        $this->registerDependencies();
-    }
-
-    public function boot(): void
-    {
-        $this->mergeConfig()
-            ->mergeLang()
-            ->mergeMigrations()
-            ->registerEvents();
-    }
-
-    protected function registerDependencies(): self
-    {
         $this->app->register(AgentServiceProvider::class);
 
-        return $this;
-    }
-
-    protected function mergeMigrations(): self
-    {
-        $path = __DIR__ . '/../migrations';
-
-        $this->publishes([
-                $path => database_path('migrations'),
-        ], 'migrations');
-
-        return $this;
-    }
-
-    protected function mergeConfig(): self
-    {
-        $configPath = __DIR__ . '/../config/' . $this->name . '.php';
-
-        $this->mergeConfigFrom($configPath, $this->name);
-
-        $this->publishes([$configPath => config_path($this->name . '.php')], 'auth-checker');
-
-        return $this;
-    }
-
-    protected function mergeLang(): self
-    {
-        $langPath = __DIR__ . '/../lang/';
-
-        $this->loadTranslationsFrom($langPath, $this->name);
-
-        return $this;
-    }
-
-    protected function registerEvents(): self
-    {
         /** @var Dispatcher $dispatcher */
         $dispatcher = $this->app['events'];
         $dispatcher->subscribe(AuthCheckerSubscriber::class);
-
-        return $this;
     }
 }

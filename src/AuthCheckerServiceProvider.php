@@ -26,14 +26,18 @@ class AuthCheckerServiceProvider extends \Illuminate\Support\ServiceProvider
                 __DIR__.'/../migrations/create_logins_table.php.stub' => database_path('migrations/'.date('Y_m_d_His', time()).'_create_logins_table.php')
             ], 'auth-checker');
         }
+
+        $this->mergeConfigFrom(__DIR__.'/../config/auth-checker.php', 'auth-checker');
+
+        $this->loadTranslationsFrom(__DIR__.'/../lang/', 'auth-checker');
+
+        /** @var Dispatcher $dispatcher */
+        $dispatcher = $this->app['events'];
+        $dispatcher->subscribe(AuthCheckerSubscriber::class);
     }
 
     public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/auth-checker.php', 'auth-checker');
-
-        $this->loadTranslationsFrom(__DIR__.'/../lang/', 'auth-checker');
-        
         $this->app->singleton(AuthChecker::class, function ($app) {
             return new AuthChecker($app, $app['request']);
         });
@@ -41,9 +45,5 @@ class AuthCheckerServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->app->alias(AuthChecker::class, 'authchecker');
 
         $this->app->register(AgentServiceProvider::class);
-
-        /** @var Dispatcher $dispatcher */
-        $dispatcher = $this->app['events'];
-        $dispatcher->subscribe(AuthCheckerSubscriber::class);
     }
 }

@@ -3,6 +3,7 @@
 ## 1.4.1
 
 - Package auto-discover
+- Fix tests
 
 ## 1.4.0
 

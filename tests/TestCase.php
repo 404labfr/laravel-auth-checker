@@ -14,10 +14,11 @@ class TestCase extends \Orchestra\Testbench\TestCase
 
         $this->artisan('migrate', ['--database' => 'testbench']);
 
-        $this->loadMigrationsFrom([
-            '--database' => 'testbench',
-            '--path' => realpath(__DIR__ . '/../migrations'),
-        ]);
+        include_once __DIR__.'/../migrations/create_devices_table.php.stub';
+        (new \CreateDevicesTable())->up();
+
+        include_once __DIR__.'/../migrations/create_logins_table.php.stub';
+        (new \CreateLoginsTable())->up();
 
         $this->loadMigrationsFrom([
             '--database' => 'testbench',

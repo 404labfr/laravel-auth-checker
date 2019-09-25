@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.1
+
+- Package auto-discover
+
 ## 1.4.0
 
 - Changed how the application boot

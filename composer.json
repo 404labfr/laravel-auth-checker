@@ -41,6 +41,13 @@
       "Lab404\\Tests\\": "tests/"
     }
   },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Lab404\\AuthChecker\\AuthCheckerServiceProvider"
+      ]
+    }
+  },
   "minimum-stability": "dev",
   "prefer-stable": true
 }

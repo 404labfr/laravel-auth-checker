@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.4.2
+
+- Fix config publishing
+- Fix migrations: use bigIncrements and bigInteger, disable foreign references
+
 ## 1.4.1
 
 - Package auto-discover

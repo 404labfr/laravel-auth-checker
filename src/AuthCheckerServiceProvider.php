@@ -17,7 +17,7 @@ class AuthCheckerServiceProvider extends \Illuminate\Support\ServiceProvider
     public function boot(): void
     {
         $this->publishes([
-            __DIR__.'../config/auth-checker.php' => config_path('auth-checker.php')
+            __DIR__.'/../config/auth-checker.php' => config_path('auth-checker.php')
         ], 'auth-checker');
 
         if (false === class_exists('CreateLoginsTable') && false === class_exists('CreateDevicesTable')) {

@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/404labfr/laravel-auth-checker.svg?branch=master)](https://travis-ci.org/404labfr/laravel-auth-checker) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/404labfr/laravel-auth-checker/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/404labfr/laravel-auth-checker/?branch=master)
 
-**Laravel Auth Checker** is a plugin to **collect login info** and **devices** used when an **user authenticate**. It makes it easy to **catch user authentication, attempts and lockouts** from **new IP address** or **new devices**.
+**Laravel Auth Checker** is a plugin to **collect login info** and **devices** used when a **user authenticates**. It makes it easy to **catch user authentication attempts and lockouts** from **new IP address** or **new devices**.
   
 ![Example logins table](screenshot.png?raw=true)
  
@@ -52,11 +52,11 @@ php artisan vendor:publish --tag=auth-checker
 php artisan migrate
 ```
 
-Note: Migrations are published in case you need to customize migrations timestamps to integrate to your existing project.
+Note: Migrations are published in case you need to customize migration timestamps to integrate to your existing project.
 
 ## Access collected data
 
-This library brings to you logins data and devices data for your users.
+This library collects login data and devices data about your users.
 
 ### Logins
 
@@ -116,18 +116,18 @@ $devices = $user->devices;
 - [x] Capture failed logins
 - [x] Capture lockout logins
 - [ ] Trust / Untrust devices
-- [ ] Notify user when an unknow device log in
+- [ ] Notify user when an unknown device log in
 
 ## Events
 
-There are many events available that can be used to add features to you app:
-- `LoginCreated` is fired when a user authenticate.
-- `DeviceCreated` is fired when a new device is created for an user.
-- `FailedAuth` is fired when an user fails to log in.
-- `LockoutAuth` is fired when authentication is locked for an user (too many attempts).
+There are many events available that can be used to add features to your app:
+- `LoginCreated` is fired when a user authenticates.
+- `DeviceCreated` is fired when a new device is created for a user.
+- `FailedAuth` is fired when a user fails to log in.
+- `LockoutAuth` is fired when authentication is locked for a user (too many attempts).
 
-Each events pass to your listeners a `Login` model and a `Device` model.
- 
+Each event passes a `Login` model and a `Device` model to your listeners.
+
 ## Practical usage
 
 Once the trait `HasLoginsAndDevices` is added to your `User` model, it is extended with these methods:
@@ -135,7 +135,7 @@ Once the trait `HasLoginsAndDevices` is added to your `User` model, it is extend
 - `logins()` returns all logins
 - `auths()` returns all successful login attemps
 - `fails()` returns all failed login attempts
-- `lockouts()` returns all lockouts login attempts
+- `lockouts()` returns all lockouts
 
 Each login returned is associated with the `Device` model used.
 

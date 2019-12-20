@@ -2,7 +2,7 @@
 
 namespace Lab404\AuthChecker\Interfaces;
 
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
  * @package Lab404\AuthChecker\Interfaces
@@ -14,15 +14,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 interface HasLoginsAndDevicesInterface
 {
-    public function logins(): HasMany;
+    public function logins(): MorphMany;
 
-    public function auths(): HasMany;
+    public function auths(): MorphMany;
 
-    public function fails(): HasMany;
+    public function fails(): MorphMany;
 
-    public function lockouts(): HasMany;
+    public function lockouts(): MorphMany;
 
-    public function devices(): HasMany;
+    public function devices(): MorphMany;
 
     public function hasDevices(): bool;
 

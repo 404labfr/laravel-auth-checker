@@ -4,6 +4,7 @@ namespace Lab404\AuthChecker\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
  * @package Lab404\AuthChecker\Models
@@ -12,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $device_id
  * @property \Illuminate\Contracts\Auth\Authenticatable $user
  * @property int $user_id
+ * @property string $user_type
  * @property string $ip_address
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
@@ -27,22 +29,22 @@ class Login extends Model
     /** @var array $casts */
     protected $casts = [
         'user_id' => 'integer',
+        'user_type' => 'string',
         'device_id' => 'integer',
         'ip_address' => 'string',
     ];
     /** @var array $fillable */
     protected $fillable = [
         'user_id',
+        'user_type',
         'ip_address',
         'created_at',
         'type',
     ];
 
-    public function user(): BelongsTo
+    public function user(): MorphTo
     {
-        $model = config('auth.providers.users.model');
-
-        return $this->belongsTo($model);
+        return $this->morphTo();
     }
 
     public function device(): BelongsTo

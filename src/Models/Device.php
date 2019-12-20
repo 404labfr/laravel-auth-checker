@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
  * @package Lab404\AuthChecker\Models
@@ -14,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property \Lab404\AuthChecker\Models\Login[]         $logins
  * @property \Illuminate\Contracts\Auth\Authenticatable $user
  * @property int                                        $user_id
+ * @property string                                     $user_type
  * @property string                                     $platform
  * @property string                                     $platform_version
  * @property string                                     $browser
@@ -60,10 +63,8 @@ class Device extends Model
         return $relation;
     }
 
-    public function user(): BelongsTo
+    public function user(): MorphTo
     {
-        $model = config('auth.providers.users.model');
-
-        return $this->belongsTo($model);
+        return $this->morphTo();
     }
 }

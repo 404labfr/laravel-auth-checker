@@ -10,7 +10,8 @@ class CreateDevicesTable extends Migration
     {
         Schema::create('devices', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('user_id')->unsigned()->index();
+            $table->bigInteger('user_id')->unsigned();
+            $table->string('user_type');
             $table->string('platform')->nullable();
             $table->string('platform_version')->nullable();
             $table->string('browser')->nullable();
@@ -21,8 +22,6 @@ class CreateDevicesTable extends Migration
             $table->boolean('is_trusted')->default(0)->index();
             $table->boolean('is_untrusted')->default(0)->index();
             $table->timestamps();
-
-            // $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

@@ -3,6 +3,7 @@
 namespace Lab404\AuthChecker\Models;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
  * Class HasLoginsAndDevices
@@ -11,14 +12,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 trait HasLoginsAndDevices
 {
-    public function logins(): HasMany
+    public function logins(): MorphMany
     {
         $model = config('auth-checker.models.login') ?? Login::class;
 
-        return $this->hasMany($model);
+        return $this->morphMany($model, 'user');
     }
 
-    public function auths(): HasMany
+    public function auths(): MorphMany
     {
         $relation = $this->logins();
         $relation->where('type', Login::TYPE_LOGIN);
@@ -26,7 +27,7 @@ trait HasLoginsAndDevices
         return $relation;
     }
 
-    public function fails(): HasMany
+    public function fails(): MorphMany
     {
         $relation = $this->logins();
         $relation->where('type', Login::TYPE_FAILED);
@@ -34,7 +35,7 @@ trait HasLoginsAndDevices
         return $relation;
     }
 
-    public function lockouts(): HasMany
+    public function lockouts(): MorphMany
     {
         $relation = $this->logins();
         $relation->where('type', Login::TYPE_LOCKOUT);
@@ -42,11 +43,11 @@ trait HasLoginsAndDevices
         return $relation;
     }
 
-    public function devices(): HasMany
+    public function devices(): MorphMany
     {
         $model = config('auth-checker.models.device') ?? Device::class;
 
-        return $this->hasMany($model);
+        return $this->morphMany($model, 'user');
     }
 
     public function hasDevices(): bool

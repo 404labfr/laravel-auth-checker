@@ -78,6 +78,7 @@ class AuthCheckerTest extends TestCase
     {
         $device = new Device();
         $device->user_id = 1;
+        $device->user_type = 'App\Models\User';
         $device->save();
 
         $this->config->set('auth-checker.throttle', 15);
@@ -86,6 +87,7 @@ class AuthCheckerTest extends TestCase
 
         $login = new Login(['ip_address' => '1.2.3.4']);
         $login->user_id = 1;
+        $login->user_type = 'App\Models\User';
         $device->logins()->save($login);
 
         $this->config->set('auth-checker.throttle', 0);
@@ -103,10 +105,12 @@ class AuthCheckerTest extends TestCase
     {
         $device = new Device();
         $device->user_id = 1;
+        $device->user_type = 'App\Models\User';
         $device->save();
 
         $login = new Login(['ip_address' => '1.2.3.4']);
         $login->user_id = 1;
+        $login->user_type = 'App\Models\User';
         $device->logins()->save($login);
 
         $this->config->set('auth-checker.throttle', 5);

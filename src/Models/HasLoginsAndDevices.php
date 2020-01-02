@@ -2,7 +2,6 @@
 
 namespace Lab404\AuthChecker\Models;
 
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**

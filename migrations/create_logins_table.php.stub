@@ -11,13 +11,13 @@ class CreateLoginsTable extends Migration
         Schema::create('logins', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->ipAddress('ip_address');
-            $table->string('type')->default(\Lab404\AuthChecker\Models\Login::TYPE_LOGIN)->index();
+            $table->string('type')->default(\Lab404\AuthChecker\Models\Login::TYPE_LOGIN);
             $table->bigInteger('user_id')->unsigned();
             $table->string('user_type');
             $table->bigInteger('device_id')->unsigned()->index()->nullable();
             $table->timestamps();
 
-            // $table->foreign('device_id')->references('id')->on('devices')->onDelete('cascade');
+            // $table->index(['user_id', 'user_type']);
         });
     }
 

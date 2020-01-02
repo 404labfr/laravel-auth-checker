@@ -22,6 +22,8 @@ class CreateDevicesTable extends Migration
             $table->boolean('is_trusted')->default(0)->index();
             $table->boolean('is_untrusted')->default(0)->index();
             $table->timestamps();
+
+            // $table->index(['user_id', 'user_type']);
         });
     }
 

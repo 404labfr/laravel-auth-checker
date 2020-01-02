@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.0
+
+- Users now use MorphMany instead of HasMany
+- Devices and Logins now use MorphTo instead of BelongsTo
+- Tests updated with PHP 7.4
+
 ## 1.4.2
 
 - Fix config publishing

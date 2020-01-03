@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.1
+
+⚠️ Run `php artisan vendor:publish --tag=auth-checker` 
+
+- Fixed database new polymorphic column
+
 ## 1.5.0
 
 - Users now use MorphMany instead of HasMany

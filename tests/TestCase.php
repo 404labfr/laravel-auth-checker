@@ -20,6 +20,9 @@ class TestCase extends \Orchestra\Testbench\TestCase
         include_once __DIR__.'/../migrations/create_logins_table.php.stub';
         (new \CreateLoginsTable())->up();
 
+        include_once __DIR__.'/../migrations/update_logins_and_devices_table_user_relation.php.stub';
+        (new \UpdateLoginsAndDevicesTableUserRelation())->up();
+
         $this->loadMigrationsFrom([
             '--database' => 'testbench',
             '--path' => realpath(__DIR__ . '/Stubs/migrations'),

@@ -101,8 +101,8 @@ class AuthChecker
         $device->is_desktop = $agent->isDesktop() ? true : false;
         $device->is_mobile = $agent->isMobile() ? true : false;
         $device->language = count($agent->languages()) ? $agent->languages()[0] : null;
-        $device->user_id = $user->getKey();
-        $device->user_type = get_class($user);
+
+        $device->user()->associate($user);
 
         $device->save();
 
@@ -136,12 +136,12 @@ class AuthChecker
         $ip = $this->request->ip();
 
         $login = new $model([
-            'user_id' => $user->getKey(),
-            'user_type' => get_class($user),
             'ip_address' => $ip,
             'device_id' => $device->id,
             'type' => $type,
         ]);
+
+        $login->user()->associate($user);
 
         $device->login()->save($login);
 

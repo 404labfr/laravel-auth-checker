@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.5.2
+
+- Update polymorphic relation [#18](https://github.com/404labfr/laravel-auth-checker/pull/18) 
+
 ## 1.5.1
 
 ⚠️ Run `php artisan vendor:publish --tag=auth-checker` 

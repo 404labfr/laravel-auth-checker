@@ -19,8 +19,16 @@
 
 ## Requirements
 
-- Laravel 6.0
+- Laravel 6.x or 7.x
 - PHP >= 7.2
+
+### Laravel support
+
+| Version       | Release       |
+|:-------------:|:-------------:|
+| 6.x, 7.x      | 1.6           |
+| 5.8           | 1.2           |
+| 5.7, 5.6      | 1.1           |
 
 **See 1.2 branch for Laravel < 6**
 **See 1.1 branch for Laravel < 5.7**

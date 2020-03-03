@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.6.0
+
+- Laravel 7.x support
+
 ## 1.5.2
 
 - Update polymorphic relation [#18](https://github.com/404labfr/laravel-auth-checker/pull/18) 

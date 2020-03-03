@@ -30,9 +30,6 @@
 | 5.8           | 1.2           |
 | 5.7, 5.6      | 1.1           |
 
-**See 1.2 branch for Laravel < 6**
-**See 1.1 branch for Laravel < 5.7**
-
 ## Installation
 
 - Require it with Composer:

@@ -22,9 +22,11 @@ class AuthCheckerSubscriber
         /** @var HasLoginsAndDevicesInterface $user */
         $user = $event->user;
 
-        /** @var AuthChecker $manager */
-        $manager = app('authchecker');
-        $manager->handleLogin($user);
+        if ($user instanceof HasLoginsAndDevicesInterface) {
+            /** @var AuthChecker $manager */
+            $manager = app('authchecker');
+            $manager->handleLogin($user);
+        }
     }
 
     public function onUserLoginFailed(Failed $event): void
@@ -32,7 +34,7 @@ class AuthCheckerSubscriber
         /** @var HasLoginsAndDevicesInterface $user */
         $user = $event->user;
 
-        if (!is_null($user)) {
+        if (!is_null($user) && $user instanceof HasLoginsAndDevicesInterface) {
             /** @var AuthChecker $manager */
             $manager = app('authchecker');
             $manager->handleFailed($user);

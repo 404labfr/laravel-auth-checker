@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.6.1
+
+- Laravel 8.x support
+
 ## 1.6.0
 
 - Laravel 7.x support

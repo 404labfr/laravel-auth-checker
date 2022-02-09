@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.6.2
+
+- Laravel 9.x support [#23](https://github.com/404labfr/laravel-auth-checker/pull/23)
+
 ## 1.6.1
 
 - Laravel 8.x support

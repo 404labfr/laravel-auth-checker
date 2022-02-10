@@ -19,7 +19,7 @@
 
 ## Requirements
 
-- Laravel 6.x to 8.x
+- Laravel 6.x to 9.x
 - PHP >= 7.2
 
 ### Laravel support

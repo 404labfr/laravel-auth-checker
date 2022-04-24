@@ -167,6 +167,8 @@ class AuthChecker
     {
         $throttle = $this->getLoginThrottleConfig();
 
+        $device->loadMissing('login');
+
         if ($throttle === 0 || is_null($device->login)) {
             return true;
         }

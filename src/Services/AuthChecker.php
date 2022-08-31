@@ -188,6 +188,8 @@ class AuthChecker
         $attributes = is_null($attributes) ? $this->getDeviceMatchingAttributesConfig() : $attributes;
         $matches = 0;
 
+        $device->loadMissing('login');
+
         if (in_array('platform', $attributes)) {
             $matches += $device->platform === $agent->platform();
         }

@@ -1,9 +1,11 @@
 # Changelog
 
-## 1.7.0
+## Unreleased
 
 - Bump minimal Laravel version to 8.x
 - Bump minimal PHP version to 7.3
+- Fix lazy loading [#25](https://github.com/404labfr/laravel-auth-checker/pull/25), thanks to [michael-rubel](https://github.com/michael-rubel)
+- Ability to skip logging [#21](https://github.com/404labfr/laravel-auth-checker/pull/21), thanks to [danielboendergaard](https://github.com/danielboendergaard)
 - Add chinese language files [#29](https://github.com/404labfr/laravel-auth-checker/pull/29), thanks to [guanguans](https://github.com/guanguans)
 
 ## 1.6.2

@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.7.0
 
 - Bump minimal Laravel version to 8.x
 - Bump minimal PHP version to 7.3

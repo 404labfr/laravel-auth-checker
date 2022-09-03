@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.7.0
+
+- Bump minimal Laravel version to 8.x
+- Bump minimal PHP version to 7.3
+
 ## 1.6.2
 
 - Laravel 9.x support [#23](https://github.com/404labfr/laravel-auth-checker/pull/23)

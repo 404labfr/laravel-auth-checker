@@ -82,9 +82,13 @@ class AuthChecker
             return null;
         }
 
-        $matching = $user->devices->filter(function ($item) use ($agent) {
-            return $this->deviceMatch($item, $agent);
-        })->first();
+        $matching = $user
+            ->devices()
+            ->with('login')
+            ->get()
+            ->filter(function ($device) use ($agent) {
+                return $this->deviceMatch($device, $agent);
+            })->first();
 
         return $matching ? $matching : null;
     }
@@ -156,9 +160,13 @@ class AuthChecker
             return false;
         }
 
-        $device = $user->devices->filter(function ($item) use ($agent) {
-            return $this->deviceMatch($item, $agent);
-        })->first();
+        $device = $user
+            ->devices()
+            ->with('login')
+            ->get()
+            ->filter(function ($device) use ($agent) {
+                return $this->deviceMatch($device, $agent);
+            })->first();
 
         return is_null($device) ? false : $device;
     }
@@ -187,8 +195,6 @@ class AuthChecker
     {
         $attributes = is_null($attributes) ? $this->getDeviceMatchingAttributesConfig() : $attributes;
         $matches = 0;
-
-        $device->loadMissing('login');
 
         if (in_array('platform', $attributes)) {
             $matches += $device->platform === $agent->platform();

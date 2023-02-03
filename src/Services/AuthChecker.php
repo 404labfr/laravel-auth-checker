@@ -102,8 +102,8 @@ class AuthChecker
         $device->platform_version = $agent->version($device->platform);
         $device->browser = $agent->browser();
         $device->browser_version = $agent->version($device->browser);
-        $device->is_desktop = $agent->isDesktop() ? true : false;
-        $device->is_mobile = $agent->isMobile() ? true : false;
+        $device->is_desktop = $agent->isDesktop();
+        $device->is_mobile = $agent->isMobile();
         $device->language = count($agent->languages()) ? $agent->languages()[0] : null;
 
         $device->user()->associate($user);

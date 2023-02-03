@@ -78,7 +78,7 @@ class AuthChecker
 
     public function findUserDeviceByAgent(HasLoginsAndDevicesInterface $user, Agent $agent): ?Device
     {
-        if (!$user->hasDevices()) {
+        if (! $user->hasDevices()) {
             return null;
         }
 
@@ -90,7 +90,7 @@ class AuthChecker
                 return $this->deviceMatch($device, $agent);
             })->first();
 
-        return $matching ? $matching : null;
+        return $matching ?: null;
     }
 
     public function createUserDeviceByAgent(HasLoginsAndDevicesInterface $user, Agent $agent): Device
@@ -156,8 +156,8 @@ class AuthChecker
 
     public function findDeviceForUser(HasLoginsAndDevicesInterface $user, Agent $agent): ?Device
     {
-        if (!$user->hasDevices()) {
-            return false;
+        if (! $user->hasDevices()) {
+            return null;
         }
 
         $device = $user
@@ -168,7 +168,7 @@ class AuthChecker
                 return $this->deviceMatch($device, $agent);
             })->first();
 
-        return is_null($device) ? false : $device;
+        return ! is_null($device) ? $device : null;
     }
 
     public function shouldLogDeviceLogin(Device $device): bool

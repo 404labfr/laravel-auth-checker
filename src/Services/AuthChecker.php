@@ -78,15 +78,19 @@ class AuthChecker
 
     public function findUserDeviceByAgent(HasLoginsAndDevicesInterface $user, Agent $agent): ?Device
     {
-        if (!$user->hasDevices()) {
+        if (! $user->hasDevices()) {
             return null;
         }
 
-        $matching = $user->devices->filter(function ($item) use ($agent) {
-            return $this->deviceMatch($item, $agent);
-        })->first();
+        $matching = $user
+            ->devices()
+            ->with('login')
+            ->get()
+            ->filter(function ($device) use ($agent) {
+                return $this->deviceMatch($device, $agent);
+            })->first();
 
-        return $matching ? $matching : null;
+        return $matching ?: null;
     }
 
     public function createUserDeviceByAgent(HasLoginsAndDevicesInterface $user, Agent $agent): Device
@@ -98,8 +102,8 @@ class AuthChecker
         $device->platform_version = $agent->version($device->platform);
         $device->browser = $agent->browser();
         $device->browser_version = $agent->version($device->browser);
-        $device->is_desktop = $agent->isDesktop() ? true : false;
-        $device->is_mobile = $agent->isMobile() ? true : false;
+        $device->is_desktop = $agent->isDesktop();
+        $device->is_mobile = $agent->isMobile();
         $device->language = count($agent->languages()) ? $agent->languages()[0] : null;
 
         $device->user()->associate($user);
@@ -152,15 +156,19 @@ class AuthChecker
 
     public function findDeviceForUser(HasLoginsAndDevicesInterface $user, Agent $agent): ?Device
     {
-        if (!$user->hasDevices()) {
-            return false;
+        if (! $user->hasDevices()) {
+            return null;
         }
 
-        $device = $user->devices->filter(function ($item) use ($agent) {
-            return $this->deviceMatch($item, $agent);
-        })->first();
+        $device = $user
+            ->devices()
+            ->with('login')
+            ->get()
+            ->filter(function ($device) use ($agent) {
+                return $this->deviceMatch($device, $agent);
+            })->first();
 
-        return is_null($device) ? false : $device;
+        return ! is_null($device) ? $device : null;
     }
 
     public function shouldLogDeviceLogin(Device $device): bool
@@ -187,8 +195,6 @@ class AuthChecker
     {
         $attributes = is_null($attributes) ? $this->getDeviceMatchingAttributesConfig() : $attributes;
         $matches = 0;
-
-        $device->loadMissing('login');
 
         if (in_array('platform', $attributes)) {
             $matches += $device->platform === $agent->platform();

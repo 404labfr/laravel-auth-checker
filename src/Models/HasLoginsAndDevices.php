@@ -51,9 +51,10 @@ trait HasLoginsAndDevices
 
     public function hasDevices(): bool
     {
-        return (bool) $this
+        return $this
             ->devices()
             ->select('id')
-            ->first();
+            ->get()
+            ->isNotEmpty();
     }
 }

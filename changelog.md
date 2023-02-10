@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Bump minimal Laravel version to 8.x
+- Bump minimal PHP version to 8.x
+- Fix N+1 [#30](https://github.com/404labfr/laravel-auth-checker/pull/30), thanks to [michael-rubel](https://github.com/michael-rubel)
+
 ## 1.7.0
 
 - Bump minimal Laravel version to 8.x

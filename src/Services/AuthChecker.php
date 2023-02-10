@@ -82,15 +82,12 @@ class AuthChecker
             return null;
         }
 
-        $matching = $user
+        return $user
             ->devices()
             ->with('login')
             ->get()
-            ->filter(function ($device) use ($agent) {
-                return $this->deviceMatch($device, $agent);
-            })->first();
-
-        return $matching ?: null;
+            ->filter(fn (Device $device) => $this->deviceMatch($device, $agent))
+            ->first();
     }
 
     public function createUserDeviceByAgent(HasLoginsAndDevicesInterface $user, Agent $agent): Device
@@ -160,15 +157,12 @@ class AuthChecker
             return null;
         }
 
-        $device = $user
+        return $user
             ->devices()
             ->with('login')
             ->get()
-            ->filter(function ($device) use ($agent) {
-                return $this->deviceMatch($device, $agent);
-            })->first();
-
-        return ! is_null($device) ? $device : null;
+            ->filter(fn (Device $device) => $this->deviceMatch($device, $agent))
+            ->first();
     }
 
     public function shouldLogDeviceLogin(Device $device): bool

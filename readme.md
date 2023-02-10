@@ -19,13 +19,14 @@
 
 ## Requirements
 
-- Laravel >= 8 (to 9)
-- PHP >= 7.3 (to 8.1)
+- Laravel 9 to 10
+- PHP 8.0 to 8.2
 
 ### Laravel support
 
 | Version  | Release |
 |:--------:|:-------:|
+|  9, 10   |   2.0   |
 |   8, 9   |   1.7   |
 |   6, 7   |   1.6   |
 |   5.8    |   1.2   |

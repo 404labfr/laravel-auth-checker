@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.0.0
+
+- Laravel 11 support [#34](https://github.com/404labfr/laravel-auth-checker/pull/34), thanks to [gboquizosanchez](https://github.com/gboquizosanchez)
+- Bump minimal Laravel version to 11
+- Bump minimal PHP version to 8.2
+- Use `#[Test]` annotation in tests instead of `@test`
+
 ## 2.0.0
 
 - Bump minimal Laravel version to 8.x

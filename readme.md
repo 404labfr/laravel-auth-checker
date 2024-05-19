@@ -8,39 +8,41 @@
  
 - [Requirements](#requirements)
 - [Installation](#installation)
-- [Access Collected Data](#access-collected-data) 
-    - [Logins](#logins) 
-    - [Devices](#devices) 
-- [Events](#events)
-- [Practical usage](#practical-usage)
+- [Usage](#usage)
+  - [Authenticatable model](#authenticatable-model)
+  - [Logins](#logins)
+  - [Devices](#devices)
+  - [Events](#events)
 - [Tests](#tests)
 - [Contributors](#contributors)
+- [Licence](#licence)
 
 
-## Requirements
+### Requirements
 
-- Laravel 9 to 10
-- PHP 8.0 to 8.2
-
-### Laravel support
-
-| Version  | Release |
-|:--------:|:-------:|
-|  9, 10   |   2.0   |
-|   8, 9   |   1.7   |
-|   6, 7   |   1.6   |
-|   5.8    |   1.2   |
-| 5.7, 5.6 |   1.1   |
+| Version  |                              Release                               |
+|:--------:|:------------------------------------------------------------------:|
+|    11    | [3.0](https://github.com/404labfr/laravel-auth-checker/tree/3.0.0) |
+|  9, 10   | [2.0](https://github.com/404labfr/laravel-auth-checker/tree/2.0.0) |
+|   8, 9   | [1.7](https://github.com/404labfr/laravel-auth-checker/tree/1.7.0) |
+|   6, 7   | [1.6](https://github.com/404labfr/laravel-auth-checker/tree/1.6.2) |
 
 ## Installation
 
-- Require it with Composer:
+* Require the package: `composer require lab404/laravel-auth-checker`
+* Publish migration files: `php artisan vendor:publish --tag=auth-checker`
+* Migrate your database: `php artisan migrate`
+* Configure your `Authenticatable` model (see below)
 
-```bash
-composer require lab404/laravel-auth-checker
-```
+## Usage
 
-- Add to your **User** model the `Lab404\AuthChecker\Models\HasLoginsAndDevices` trait and the `Lab404\AuthChecker\Interfaces\HasLoginsAndDevicesInterface` interface.
+This library collects login data and devices data about your users.
+
+### Authenticatable model
+
+Your `Authenticatable` model (usually `User`) must implement the `HasLoginsAndDevicesInterface` interface.
+
+The trait `HasLoginsAndDevices` is provided with for a working default implementation.
 
 ```php
 use Lab404\AuthChecker\Models\HasLoginsAndDevices;
@@ -48,29 +50,27 @@ use Lab404\AuthChecker\Interfaces\HasLoginsAndDevicesInterface;
 
 class User extends Authenticatable implements HasLoginsAndDevicesInterface
 {
-    use Notifiable, HasLoginsAndDevices;  
+    // ...
+    use HasLoginsAndDevices;  
 }
 ```
 
-- Publish migrations and migrate your database:
+Once configured, you can access the following methods
 
-```bash
-php artisan vendor:publish --tag=auth-checker
-php artisan migrate
-```
+- `logins()` returns all logins
+- `auths()` returns all successful login attemps
+- `fails()` returns all failed login attempts
+- `lockouts()` returns all lockouts
 
-Note: Migrations are published in case you need to customize migration timestamps to integrate to your existing project.
+Each login returned is associated with the `Device` model used
 
-## Access collected data
-
-This library collects login data and devices data about your users.
+- `devices()` returns all devices used by the user to authenticate.
 
 ### Logins
 
+Calling `$user->logins` outputs:
+
 ```php
-// Your user model:
-$logins = $user->logins;
-// Output: 
 [
     [
         'ip_address' => '1.2.3.4',
@@ -81,21 +81,21 @@ $logins = $user->logins;
         ],
         'created_at' => '2017-03-25 11:42:00',
     ],
-    // ... and more
+    // ...
 ]
 ```
 
-Also, you can directly access logins by their type:
+Also, you can directly access logins by their type
+
 - `$user->auths`, returns successful logins (via `Login::TYPE_LOGIN`)
 - `$user->fails`, returns failed logins (via `Login::TYPE_FAILED`)
 - `$user->lockouts`, returns locked out logins (via `Login::TYPE_LOCKOUT`)
 
 ### Devices
 
+Calling `$user->devices` outputs:
+
 ```php
-// Your user model:
-$devices = $user->devices;
-// Outputs:
 [
     [
         'platform' => 'OS X',
@@ -109,44 +109,20 @@ $devices = $user->devices;
           // See logins
         ],
     ],
-    // ... and more
+    // ...
 ]
 ```
 
-## Roadmap
+### Events
 
-- [x] Log user authentication
-- [x] Collect IP addresses
-- [x] Collect devices
-- [x] Get user's login history
-- [x] Get devices history
-- [x] Capture failed logins
-- [x] Capture lockout logins
-- [ ] Trust / Untrust devices
-- [ ] Notify user when an unknown device log in
+There are many events available that can be used to add features to your app
 
-## Events
-
-There are many events available that can be used to add features to your app:
 - `LoginCreated` is fired when a user authenticates.
 - `DeviceCreated` is fired when a new device is created for a user.
 - `FailedAuth` is fired when a user fails to log in.
 - `LockoutAuth` is fired when authentication is locked for a user (too many attempts).
 
 Each event passes a `Login` model and a `Device` model to your listeners.
-
-## Practical usage
-
-Once the trait `HasLoginsAndDevices` is added to your `User` model, it is extended with these methods:
-
-- `logins()` returns all logins
-- `auths()` returns all successful login attemps
-- `fails()` returns all failed login attempts
-- `lockouts()` returns all lockouts
-
-Each login returned is associated with the `Device` model used.
-
-- `devices()` returns all devices used by the user to authenticate.
 
 ## Tests
 

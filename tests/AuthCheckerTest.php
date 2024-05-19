@@ -8,6 +8,7 @@ use Jenssegers\Agent\Agent;
 use Lab404\AuthChecker\Models\Device;
 use Lab404\AuthChecker\Models\Login;
 use Lab404\AuthChecker\Services\AuthChecker;
+use PHPUnit\Framework\Attributes\Test;
 
 class AuthCheckerTest extends TestCase
 {
@@ -27,7 +28,7 @@ class AuthCheckerTest extends TestCase
         $this->agent = $this->app->make('agent');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_be_accessed_from_container()
     {
         $this->assertInstanceOf(AuthChecker::class, $this->manager);
@@ -40,7 +41,7 @@ class AuthCheckerTest extends TestCase
         $this->assertEquals(0, $this->manager->getLoginThrottleConfig());
     }
 
-    /** @test */
+    #[Test]
     public function it_matches_device_when_attributes_are_empty()
     {
         $device = new Device(['platform' => 'OS X', 'platform_version' => '10_12_2', 'browser' => 'Chrome']);
@@ -49,7 +50,7 @@ class AuthCheckerTest extends TestCase
         $this->assertTrue($result);
     }
 
-    /** @test */
+    #[Test]
     public function it_matches_device_with_attributes()
     {
         $device = new Device(['platform' => 'OS X', 'platform_version' => '10_12_0', 'browser' => 'Chrome']);
@@ -73,7 +74,7 @@ class AuthCheckerTest extends TestCase
         $this->assertTrue($result);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_log_device_login()
     {
         $device = new Device();
@@ -100,7 +101,7 @@ class AuthCheckerTest extends TestCase
         $this->assertTrue($result);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_not_log_device_login()
     {
         $device = new Device();
